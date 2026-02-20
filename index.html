@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lintex Exchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- Vanta.js dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js"></script>
+    <style>
+        :root {
+            --font-primary: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: #000000;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            letter-spacing: -0.03em;
+        }
+
+        /* Global Dark Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Utility to hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Light Theme Scrollbar Override */
+        .light-scrollbar::-webkit-scrollbar-track {
+            background: #f9f9f9 !important;
+        }
+        .light-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e2e2 !important;
+            border-radius: 10px;
+        }
+        .light-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #d1d1d1 !important;
+        }
+
+        /* 
+           PRECISE DROPDOWN ANIMATION
+        */
+        .dropdown-container {
+            position: absolute !important;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-12px);
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                        opacity 0.2s cubic-bezier(0.2, 0, 0, 1),
+                        visibility 0.2s;
+            pointer-events: none;
+            z-index: 100;
+            will-change: transform, opacity;
+        }
+
+        .dropdown-container.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Toast & Modal Animations */
+        @keyframes toast-in {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes toast-out {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
+        @keyframes modal-in {
+            0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes modal-out {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(20px) scale(0.98); }
+        }
+
+        @keyframes overlay-in {
+            0% { opacity: 0; backdrop-filter: blur(0px); }
+            100% { opacity: 1; backdrop-filter: blur(4px); }
+        }
+
+        @keyframes overlay-out {
+            0% { opacity: 1; backdrop-filter: blur(4px); }
+            100% { opacity: 0; backdrop-filter: blur(0px); }
+        }
+
+        .animate-toast-in {
+            animation: toast-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .animate-toast-out {
+            animation: toast-out 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+        }
+
+        .animate-modal-in {
+            animation: modal-in 0.3s cubic-bezier(0.2, 0, 0, 1) forwards;
+        }
+
+        .animate-modal-out {
+            animation: modal-out 0.2s cubic-bezier(0.2, 0, 0, 1) forwards;
+        }
+
+        .animate-overlay-in {
+            animation: overlay-in 0.3s ease forwards;
+        }
+
+        .animate-overlay-out {
+            animation: overlay-out 0.2s ease forwards;
+        }
+
+        /* Synchronized "Empire" Gradient for Earn Badges */
+        .apr-badge-glow {
+            background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899);
+            position: relative;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
+            background-size: 200% 100%;
+            animation: apr-glow-slide 3s ease infinite;
+        }
+
+        /* Vertical Slide Text Animation */
+        .badge-text-slide-up {
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        @keyframes apr-glow-slide {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Rolling Text Logic */
+        .rolling-text-container {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            height: 16px;
+            line-height: 16px;
+            vertical-align: middle;
+        }
+
+        .rolling-text-inner {
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .group:hover .rolling-text-inner {
+            transform: translateY(-50%);
+        }
+
+        .font-mono, [class*="price"], [class*="roi"] {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .coin-placeholder-fade {
+            animation: coin-placeholder-sequence 3s linear forwards;
+        }
+
+        @keyframes coin-placeholder-sequence {
+            0% { opacity: 0; transform: translateY(3px); }
+            8% { opacity: 1; transform: translateY(0); }
+            92% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-3px); }
+        }
+
+        .logo-symbol path {
+            fill: #605cf4;
+            transition: fill 0.3s ease;
+        }
+
+        .group:hover .logo-symbol path {
+            fill: url(#logo-symbol-gradient);
+        }
+
+        .logo-symbol-mark {
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: center;
+            transform-box: fill-box;
+            will-change: transform;
+        }
+
+        .group:hover .logo-symbol-mark {
+            transform: rotate(360deg);
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.94.0",
+    "zustand": "https://esm.sh/zustand@^5.0.11"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
