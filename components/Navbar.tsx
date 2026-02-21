@@ -89,7 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   // Standardized UI constants
   const dropdownBaseClass = "bg-white text-black rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.18)] overflow-hidden border border-gray-100";
   const darkDropdownBaseClass = "bg-[#111] text-white rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.6)] overflow-hidden border border-zinc-800";
-  const dropdownItemClass = "w-full flex items-center gap-3.5 px-5 py-3 hover:bg-zinc-100 transition-all text-left group";
+  const dropdownItemClass = "w-full flex items-center gap-3.5 px-5 py-3 hover:bg-zinc-100 transition-all text-left group rounded-2xl";
   const dropdownTextClass = "text-[13px] font-medium text-gray-800 group-hover:text-black tracking-tight"; 
   const dropdownIconClass = "text-gray-800 group-hover:text-black transition-colors shrink-0";
 
