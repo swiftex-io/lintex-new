@@ -287,7 +287,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
             >
               {tab.label}
               {tab.soon && (
-                <span className="bg-brand/10 text-brand text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Soon</span>
+                <span className="bg-brand/10 text-brand text-[9px] px-2 rounded-full font-bold uppercase tracking-wider inline-flex items-center justify-center h-4 leading-none">Soon</span>
               )}
             </button>
           ))}

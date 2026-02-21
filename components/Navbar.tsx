@@ -89,7 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   // Standardized UI constants
   const dropdownBaseClass = "bg-white text-black rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.18)] overflow-hidden border border-gray-100";
   const darkDropdownBaseClass = "bg-[#111] text-white rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.6)] overflow-hidden border border-zinc-800";
-  const dropdownItemClass = "w-full flex items-center gap-3.5 px-5 py-3 hover:bg-gray-50 transition-all text-left group";
+  const dropdownItemClass = "w-full flex items-center gap-3.5 px-5 py-3 hover:bg-zinc-100 transition-all text-left group";
   const dropdownTextClass = "text-[13px] font-medium text-gray-800 group-hover:text-black tracking-tight"; 
   const dropdownIconClass = "text-gray-800 group-hover:text-black transition-colors shrink-0";
 
@@ -521,7 +521,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                         </div>
                         <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-2 light-scrollbar">
                           {['English', '简体中文', '繁體中文', 'Tiếng Việt', 'Русский', 'Español', 'Bahasa Indonesia', 'Français', 'Deutsch', 'Italiano'].map(lang => (
-                            <button key={lang} onClick={() => setSelectedLang(lang)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-all text-left group">
+                            <button key={lang} onClick={() => setSelectedLang(lang)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-zinc-100 transition-all text-left group">
                               <span className={`text-[13px] font-medium ${selectedLang === lang ? 'text-black' : 'text-gray-600 group-hover:text-black'}`}>{lang}</span>
                               {selectedLang === lang && <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m5 13 4 4L19 7"/></svg>}
                             </button>
@@ -536,7 +536,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                         </div>
                         <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-2 light-scrollbar">
                           {['USD', 'CNY', 'RUB', 'JPY', 'EUR', 'VND', 'IDR', 'PHP', 'INR', 'GBP'].map(curr => (
-                            <button key={curr} onClick={() => setSelectedCurrency(curr)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-all text-left group">
+                            <button key={curr} onClick={() => setSelectedCurrency(curr)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-zinc-100 transition-all text-left group">
                               <span className={`text-[13px] font-medium ${selectedCurrency === curr ? 'text-black' : 'text-gray-600 group-hover:text-black'}`}>{curr}</span>
                               {selectedCurrency === curr && <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m5 13 4 4L19 7"/></svg>}
                             </button>
@@ -584,7 +584,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                         </div>
                         <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-2 light-scrollbar">
                           {['English', '简体中文', '繁體中文', 'Tiếng Việt', 'Русский', 'Español', 'Bahasa Indonesia', 'Français', 'Deutsch', 'Italiano'].map(lang => (
-                            <button key={lang} onClick={() => setSelectedLang(lang)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-all text-left group">
+                            <button key={lang} onClick={() => setSelectedLang(lang)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-zinc-100 transition-all text-left group">
                               <span className={`text-[13px] font-medium ${selectedLang === lang ? 'text-black' : 'text-gray-600 group-hover:text-black'}`}>{lang}</span>
                               {selectedLang === lang && <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m5 13 4 4L19 7"/></svg>}
                             </button>
@@ -599,7 +599,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                         </div>
                         <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-2 light-scrollbar">
                           {['USD', 'CNY', 'RUB', 'JPY', 'EUR', 'VND', 'IDR', 'PHP', 'INR', 'GBP'].map(curr => (
-                            <button key={curr} onClick={() => setSelectedCurrency(curr)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-all text-left group">
+                            <button key={curr} onClick={() => setSelectedCurrency(curr)} className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-zinc-100 transition-all text-left group">
                               <span className={`text-[13px] font-medium ${selectedCurrency === curr ? 'text-black' : 'text-gray-600 group-hover:text-black'}`}>{curr}</span>
                               {selectedCurrency === curr && <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m5 13 4 4L19 7"/></svg>}
                             </button>
