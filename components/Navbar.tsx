@@ -91,11 +91,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   const darkDropdownBaseClass = "bg-[#111] text-white rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.6)] overflow-hidden border border-zinc-800";
   const dropdownItemClass = "w-full flex items-center gap-3.5 px-5 py-3 hover:bg-gray-50 transition-all text-left group";
   const dropdownTextClass = "text-[13px] font-medium text-gray-800 group-hover:text-black tracking-tight"; 
-  const dropdownIconClass = "text-gray-400 group-hover:text-black transition-colors shrink-0";
+  const dropdownIconClass = "text-gray-800 group-hover:text-black transition-colors shrink-0";
 
   return (
     <>
-      <nav className="h-16 flex items-center px-6 bg-black z-[60] sticky top-0 shadow-2xl">
+      <nav className="h-16 flex items-center px-6 bg-black/40 backdrop-blur-xl z-[60] sticky top-0 border-b border-white/5">
         <div className="flex items-center gap-2 mr-10 cursor-pointer group shrink-0" onClick={() => onNavigate(Page.HOME)}>
           <Logo className="h-6 md:h-7 transition-all text-white" />
         </div>
@@ -125,10 +125,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <div className={dropdownTextClass}>{item.title}</div>
-                          {item.soon && <span className="bg-blue-500/10 text-blue-500 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Soon</span>}
-                          {item.isNew && <span className="apr-badge-glow text-white text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ml-1.5">NEW</span>}
+                          {item.soon && <span className="bg-brand/10 text-brand text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Soon</span>}
+                          {item.isNew && <span className="apr-badge-glow text-white text-[9px] px-2 py-[0.5px] rounded-full font-bold uppercase tracking-wider ml-0.5 inline-flex items-center justify-center h-4">NEW</span>}
                         </div>
-                        <p className="text-[11px] text-gray-400 font-medium leading-tight mt-0.5">{item.desc}</p>
+                        <p className="text-[12px] text-gray-400 font-medium leading-tight mt-0.5">{item.desc}</p>
                       </div>
                     </button>
                   ))}
@@ -158,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                       <span className={dropdownIconClass}>{item.icon}</span>
                       <div>
                         <div className={dropdownTextClass}>{item.title}</div>
-                        <p className="text-[11px] text-gray-400 font-medium mt-0.5">{item.desc}</p>
+                        <p className="text-[12px] text-gray-400 font-medium mt-0.5">{item.desc}</p>
                       </div>
                     </button>
                   ))}
@@ -193,7 +193,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                       <span className={dropdownIconClass}>{item.icon}</span>
                       <div className="flex-1">
                         <div className={dropdownTextClass}>{item.title}</div>
-                        <p className="text-[11px] text-gray-400 font-medium leading-tight mt-0.5">{item.desc}</p>
+                        <p className="text-[12px] text-gray-400 font-medium leading-tight mt-0.5">{item.desc}</p>
                       </div>
                     </button>
                   ))}
@@ -220,7 +220,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                       <span className={dropdownIconClass}>{item.icon}</span>
                       <div>
                         <div className={dropdownTextClass}>{item.title}</div>
-                        <p className="text-[11px] text-gray-400 font-medium leading-snug mt-1">{item.desc}</p>
+                        <p className="text-[12px] text-gray-400 font-medium leading-snug mt-1">{item.desc}</p>
                       </div>
                     </button>
                   ))}
@@ -267,62 +267,130 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             {/* Search Dropdown - Dark Theme Redesign */}
             <div className={`absolute top-full right-0 xl:left-0 mt-2 dropdown-container ${isSearchOpen ? 'is-visible' : ''}`}>
               <div className={`${darkDropdownBaseClass} w-[340px] py-4`}>
-                <div className="px-5 pb-3 text-[13px] font-bold text-white tracking-tight">{searchQuery ? 'Search results' : 'Popular searches'}</div>
-                <div className="space-y-0.5">
-                  {searchResults.map((asset) => (
-                    <div 
-                      key={asset.symbol} 
-                      onClick={() => { 
-                        setActivePair(`${asset.symbol}/USDT`);
-                        onNavigate(Page.TRADE); 
-                        setIsSearchOpen(false); 
-                        setSearchQuery(''); 
-                      }} 
-                      className="w-full flex items-center px-4 py-2.5 hover:bg-zinc-800 transition-all group/item cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center font-bold text-[9px] text-zinc-500 overflow-hidden relative shrink-0">
-                           <img src={`https://assets.coincap.io/assets/icons/${asset.symbol.toLowerCase()}@2x.png`} alt={asset.symbol} className="w-full h-full object-cover relative z-10" onError={(e) => (e.target as HTMLImageElement).style.display = 'none'} />
-                        </div>
-                        <div className="flex flex-col items-start leading-none truncate">
-                          <div className="flex items-center gap-1.5">
-                             <span className="text-[13px] font-bold text-white group-hover/item:text-blue-400 transition-colors">{asset.symbol}</span>
-                             <span className="text-[11px] text-zinc-500 font-medium">/ USDT</span>
-                          </div>
-                          <span className="text-[9px] bg-zinc-800 text-zinc-400 font-black px-1 rounded-sm uppercase tracking-tighter mt-1">Spot</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <div className="text-[12px] font-bold text-white tabular-nums">{asset.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                          <div className={`text-[10px] font-bold ${asset.change24h >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'} tabular-nums`}>{asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%</div>
-                        </div>
-                        <button 
-                          onClick={(e) => { 
-                            e.preventDefault();
-                            e.stopPropagation(); 
-                            toggleFavorite(asset.symbol); 
-                          }}
-                          className="p-1.5 rounded-md hover:bg-zinc-700 transition-all active:scale-125 group/fav"
-                        >
-                           <svg 
-                            width="14" 
-                            height="14" 
-                            viewBox="0 0 24 24" 
-                            fill={favorites.includes(asset.symbol) ? "#F1F22D" : "none"} 
-                            stroke="currentColor" 
-                            strokeWidth="2.5" 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round"
-                            className={`transition-all duration-300 ${favorites.includes(asset.symbol) ? 'text-[#F1F22D]' : 'text-zinc-600 group-hover/fav:text-zinc-400'}`}
-                          >
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                          </svg>
-                        </button>
+                {/* Mobile Search Input - only visible when main input is hidden */}
+                <div className="xl:hidden px-4 pb-4 border-b border-zinc-800 mb-2">
+                  <div className="relative">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input 
+                      type="text" 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search coins..."
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-[12px] font-medium text-white outline-none focus:border-zinc-700 transition-all"
+                    />
+                    {searchQuery && (
+                      <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {searchQuery && searchResults.length === 0 ? (
+                  <div className="px-5 py-8 flex flex-col items-center text-center">
+                    <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mb-4 relative">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-600">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.3-4.3"/>
+                      </svg>
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center border-2 border-zinc-900">
+                        <span className="text-zinc-400 font-bold text-lg">!</span>
                       </div>
                     </div>
-                  ))}
-                </div>
+                    <h3 className="text-lg font-bold text-white mb-1">No results found</h3>
+                    <p className="text-zinc-500 text-[12px] mb-8">We couldn't find any assets matching "{searchQuery}"</p>
+                    
+                    <div className="w-full text-left">
+                      <h4 className="text-[13px] font-bold text-white mb-4">You might like</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {balances.filter(b => ['BTC', 'ETH', 'SOL', 'PEPE'].includes(b.symbol)).map((asset) => (
+                          <div 
+                            key={asset.symbol}
+                            onClick={() => {
+                              setActivePair(`${asset.symbol}/USDT`);
+                              onNavigate(Page.TRADE);
+                              setIsSearchOpen(false);
+                              setSearchQuery('');
+                            }}
+                            className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 hover:bg-zinc-800 transition-all cursor-pointer group/card"
+                          >
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+                                <img src={`https://assets.coincap.io/assets/icons/${asset.symbol.toLowerCase()}@2x.png`} alt={asset.symbol} className="w-full h-full object-cover" onError={(e) => (e.target as HTMLImageElement).style.display = 'none'} />
+                              </div>
+                              <span className="text-[12px] font-bold text-white group-hover/card:text-brand transition-colors">{asset.symbol}/USDT</span>
+                            </div>
+                            <div className="text-[14px] font-primary font-bold text-white mb-0.5">
+                              {asset.price.toLocaleString(undefined, { minimumFractionDigits: asset.price < 1 ? 4 : 2, maximumFractionDigits: asset.price < 1 ? 4 : 2 })}
+                            </div>
+                            <div className={`text-[11px] font-bold ${asset.change24h >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>
+                              {asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="px-5 pb-3 text-[13px] font-bold text-white tracking-tight">{searchQuery ? 'Search results' : 'Popular searches'}</div>
+                    <div className="space-y-0.5">
+                      {searchResults.map((asset) => (
+                        <div 
+                          key={asset.symbol} 
+                          onClick={() => { 
+                            setActivePair(`${asset.symbol}/USDT`);
+                            onNavigate(Page.TRADE); 
+                            setIsSearchOpen(false); 
+                            setSearchQuery(''); 
+                          }} 
+                          className="w-full flex items-center px-4 py-2.5 hover:bg-zinc-800 transition-all group/item cursor-pointer"
+                        >
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center font-bold text-[9px] text-zinc-500 overflow-hidden relative shrink-0">
+                               <img src={`https://assets.coincap.io/assets/icons/${asset.symbol.toLowerCase()}@2x.png`} alt={asset.symbol} className="w-full h-full object-cover relative z-10" onError={(e) => (e.target as HTMLImageElement).style.display = 'none'} />
+                            </div>
+                            <div className="flex flex-col items-start leading-none truncate">
+                              <div className="flex items-center gap-1.5">
+                                 <span className="text-[13px] font-bold text-white group-hover/item:text-brand transition-colors">{asset.symbol}</span>
+                                 <span className="text-[11px] text-zinc-500 font-medium">/ USDT</span>
+                              </div>
+                              <span className="text-[9px] bg-zinc-800 text-zinc-400 font-black px-1 rounded-sm uppercase tracking-tighter mt-1">Spot</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <div className="text-[12px] font-primary font-bold text-white tabular-nums">{asset.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                              <div className={`text-[10px] font-bold ${asset.change24h >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'} tabular-nums`}>{asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%</div>
+                            </div>
+                            <button 
+                              onClick={(e) => { 
+                                e.preventDefault();
+                                e.stopPropagation(); 
+                                toggleFavorite(asset.symbol); 
+                              }}
+                              className="p-1.5 rounded-md hover:bg-zinc-700 transition-all active:scale-125 group/fav"
+                            >
+                               <svg 
+                                width="14" 
+                                height="14" 
+                                viewBox="0 0 24 24" 
+                                fill={favorites.includes(asset.symbol) ? "#F1F22D" : "none"} 
+                                stroke="currentColor" 
+                                strokeWidth="2.5" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                                className={`transition-all duration-300 ${favorites.includes(asset.symbol) ? 'text-[#F1F22D]' : 'text-zinc-600 group-hover/fav:text-zinc-400'}`}
+                              >
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -331,9 +399,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             <>
               <button 
                 onClick={() => { onNavigate(Page.ASSETS); setDepositModalOpen(true); }} 
-                className="hidden lg:block group px-5 py-2 apr-badge-glow text-white text-[12px] font-bold tracking-tight rounded-full active:scale-95 transition-all mr-3 shadow-[0_0_15px_rgba(79,230,241,0.2)] hover:shadow-[0_0_25px_rgba(79,230,241,0.5)] whitespace-nowrap shrink-0 overflow-hidden"
+                className="hidden lg:block group px-5 py-2 apr-badge-glow text-white text-[12px] font-bold tracking-tight rounded-full active:scale-95 transition-all mr-3 shadow-[0_0_15px_rgba(253,104,24,0.2)] hover:shadow-[0_0_25px_rgba(253,104,24,0.4)] whitespace-nowrap shrink-0 overflow-hidden"
               >
-                <span className="rolling-text-container">
+                <span className="rolling-text-container relative -top-[0.5px]">
                   <span className="rolling-text-inner">
                     <span className="block">Deposit</span>
                     <span className="block">Deposit</span>
@@ -393,9 +461,6 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                         <span className="text-sm font-semibold truncate tracking-tight">{maskedEmail}</span>
                         <span className="text-[10px] text-gray-400 font-bold tracking-tight mt-0.5 UID: ">UID: {displayUid}</span>
                       </div>
-                    </div>
-                    <div className="px-5 pb-4 border-b border-gray-50">
-                      <button className="w-full py-2 border border-gray-200 rounded-full text-[11px] font-semibold hover:bg-gray-50 transition-colors tracking-tight">Switch sub-account</button>
                     </div>
                     <div className="py-2 max-h-[440px] overflow-y-auto light-scrollbar">
                       {[

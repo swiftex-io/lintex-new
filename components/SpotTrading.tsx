@@ -530,7 +530,7 @@ const SpotTrading: React.FC = () => {
                         <div className="col-span-6 flex items-center gap-3 overflow-hidden">
                           <img src={`https://assets.coincap.io/assets/icons/${asset.symbol.toLowerCase()}@2x.png`} alt={asset.symbol} className="w-6 h-6 rounded-full object-cover shrink-0" />
                           <div className="flex flex-col min-w-0">
-                            <span className="text-[13px] font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                            <span className="text-[13px] font-bold text-white group-hover:text-brand transition-colors truncate">
                               {asset.symbol}<span className="text-zinc-500 font-medium">/USDT</span>
                             </span>
                             <span className="text-[11px] text-zinc-500 font-medium truncate uppercase">
@@ -649,11 +649,11 @@ const SpotTrading: React.FC = () => {
                 ) : (
                   <>
                     <div className="flex gap-1 p-2 border-b border-zinc-900/50 bg-zinc-950/20 shrink-0">
-                      <button onClick={() => setOpenOrdersSubTab('limit_market')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${openOrdersSubTab === 'limit_market' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-custom-400'}`}>
+                      <button onClick={() => setOpenOrdersSubTab('limit_market')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${openOrdersSubTab === 'limit_market' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-brand'}`}>
                         Limit | Market
                         <SubTabCounter count={openLimitMarketCount} />
                       </button>
-                      <button onClick={() => setOpenOrdersSubTab('tpsl')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${openOrdersSubTab === 'tpsl' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-400'}`}>
+                      <button onClick={() => setOpenOrdersSubTab('tpsl')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${openOrdersSubTab === 'tpsl' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-brand'}`}>
                         TP/SL
                         <SubTabCounter count={openTPSLCount} />
                       </button>
@@ -687,7 +687,7 @@ const SpotTrading: React.FC = () => {
                             if (isBracket && openOrdersSubTab === 'tpsl') {
                               return (
                                 <React.Fragment key={o.id}>
-                                  <tr className="border-b border-zinc-900/10 hover:bg-zinc-900/20 transition-all">
+                                  <tr className="border-b border-zinc-900/10 hover:bg-white/[0.05] transition-all">
                                     <td rowSpan={2} className="px-4 py-3 text-zinc-500 tabular-nums border-r border-zinc-900/10">{o.time}</td>
                                     <td rowSpan={2} className="px-4 py-3 font-medium border-r border-zinc-900/20">
                                       <div className="flex flex-col">
@@ -713,7 +713,7 @@ const SpotTrading: React.FC = () => {
                                       <button onClick={() => cancelOrder(o.id)} className="text-[10px] font-black text-red-500 hover:text-red-400 uppercase tracking-widest bg-red-500/5 px-3 py-1 rounded border border-red-500/20 hover:border-red-500/50 transition-all">Cancel</button>
                                     </td>
                                   </tr>
-                                  <tr className="border-b border-zinc-900/30 hover:bg-zinc-900/20 transition-all">
+                                  <tr className="border-b border-zinc-900/30 hover:bg-white/[0.05] transition-all">
                                     <td className="px-4 py-3 text-zinc-300 font-medium flex items-center gap-2">
                                       <span className="w-2 h-2 rounded-full bg-[#ff4d4f]"></span>
                                       SL: {o.side === 'sell' ? '<=' : '>='} {o.slPrice?.toLocaleString()}
@@ -726,7 +726,7 @@ const SpotTrading: React.FC = () => {
                             }
 
                             return (
-                              <tr key={o.id} className="border-b border-zinc-900/30 hover:bg-zinc-900/20 transition-all">
+                              <tr key={o.id} className="border-b border-zinc-900/30 hover:bg-white/[0.05] transition-all">
                                 <td className="px-4 py-3 text-zinc-500 tabular-nums border-r border-zinc-900/10">{o.time}</td>
                                 <td className="px-4 py-3 font-medium"><span className="font-bold text-white">{o.symbol}</span> <span className="text-zinc-600 text-[9px] uppercase">{o.type}</span></td>
                                 <td className={`px-4 py-3 font-bold ${o.side === 'buy' ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>{o.side.toUpperCase()}</td>
@@ -747,7 +747,7 @@ const SpotTrading: React.FC = () => {
                                     {(o.tpPrice || o.slPrice) ? (
                                       <button 
                                         onClick={() => setViewingTPSLOrder(o)}
-                                        className="text-blue-400 hover:text-blue-300 font-black uppercase text-[10px] tracking-tight"
+                                        className="text-brand hover:text-brand/80 font-black uppercase text-[10px] tracking-tight"
                                       >
                                         View
                                       </button>
@@ -773,11 +773,11 @@ const SpotTrading: React.FC = () => {
                 ) : (
                   <>
                     <div className="flex gap-1 p-2 border-b border-zinc-900/50 bg-zinc-950/20 shrink-0">
-                      <button onClick={() => setHistorySubTab('limit_market')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${historySubTab === 'limit_market' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-custom-400'}`}>
+                      <button onClick={() => setHistorySubTab('limit_market')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${historySubTab === 'limit_market' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-brand'}`}>
                         Limit | Market
                         <SubTabCounter count={historyLimitMarketCount} />
                       </button>
-                      <button onClick={() => setHistorySubTab('tpsl')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${historySubTab === 'tpsl' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-400'}`}>
+                      <button onClick={() => setHistorySubTab('tpsl')} className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-2 ${historySubTab === 'tpsl' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-brand'}`}>
                         TP/SL
                         <SubTabCounter count={historyTPSLCount} />
                       </button>
@@ -811,7 +811,7 @@ const SpotTrading: React.FC = () => {
                               const opSl = o.side === 'sell' ? '<=' : '>=';
                               return (
                                 <React.Fragment key={o.id}>
-                                  <tr className="border-b border-zinc-900/10 hover:bg-zinc-900/20 transition-all">
+                                  <tr className="border-b border-zinc-900/10 hover:bg-white/[0.05] transition-all">
                                     <td rowSpan={2} className="px-4 py-4 text-zinc-500 font-medium tabular-nums border-r border-zinc-900/10">{o.time}</td>
                                     <td rowSpan={2} className="px-4 py-4 border-r border-zinc-900/10">
                                       <div className="flex flex-col">
@@ -830,10 +830,10 @@ const SpotTrading: React.FC = () => {
                                     </td>
                                     <td className="px-4 py-4 text-zinc-400 font-medium tabular-nums">{o.amount}</td>
                                     <td rowSpan={2} className="px-4 py-4 text-right pr-4">
-                                      <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 animate-pulse">Pending</span>
+                                      <span className="text-[10px] font-black uppercase tracking-widest text-brand animate-pulse">Pending</span>
                                     </td>
                                   </tr>
-                                  <tr className="border-b border-zinc-900/30 hover:bg-zinc-900/20 transition-all">
+                                  <tr className="border-b border-zinc-900/30 hover:bg-white/[0.05] transition-all">
                                     <td className="px-4 py-4 text-zinc-300 font-medium tabular-nums">
                                       <div className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 rounded-full bg-[#ff4d4f]"></span>
@@ -855,7 +855,7 @@ const SpotTrading: React.FC = () => {
                             ) : o.price.toLocaleString();
 
                             return (
-                              <tr key={o.id} className={`border-b border-zinc-900/30 hover:bg-zinc-900/20 transition-all group ${o.status === 'canceled' ? 'opacity-40 grayscale-[0.5]' : ''}`}>
+                              <tr key={o.id} className={`border-b border-zinc-900/30 hover:bg-white/[0.05] transition-all group ${o.status === 'canceled' ? 'opacity-40 grayscale-[0.5]' : ''}`}>
                                 <td className="px-4 py-4 text-zinc-500 font-medium tabular-nums border-r border-zinc-900/10">{o.time}</td>
                                 <td className="px-4 py-4"><span className="font-bold text-white uppercase">{o.symbol}</span> <span className="text-[9px] text-zinc-600 uppercase ml-1">{o.type === 'tpsl' ? assetName : o.type}</span></td>
                                 <td className={`px-4 py-4 font-bold border-r border-zinc-900/10 ${o.side === 'buy' ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>{o.side.toUpperCase()}</td>
@@ -866,7 +866,7 @@ const SpotTrading: React.FC = () => {
                                     {o.type === 'tpsl' || o.tpPrice || o.slPrice ? (
                                       <button 
                                         onClick={() => setViewingTPSLOrder(o)}
-                                        className="text-blue-400 hover:text-blue-300 font-black uppercase text-[10px] tracking-tight"
+                                        className="text-brand hover:text-brand/80 font-black uppercase text-[10px] tracking-tight"
                                       >
                                         View
                                       </button>
@@ -929,7 +929,7 @@ const SpotTrading: React.FC = () => {
                         const mockPnlPercent = ((asset.price - mockCostPrice) / mockCostPrice) * 100;
                         
                         return (
-                          <tr key={asset.symbol} className="border-b border-zinc-900/30 hover:bg-zinc-900/20 transition-all group">
+                          <tr key={asset.symbol} className="border-b border-zinc-900/30 hover:bg-white/[0.05] transition-all group">
                             <td className="px-4 py-4">
                               <div className="flex items-center gap-2.5">
                                 <div className="w-5 h-5 rounded-full overflow-hidden bg-zinc-800 shrink-0">
@@ -958,7 +958,7 @@ const SpotTrading: React.FC = () => {
                             </td>
                             <td className="px-4 py-4 text-right pr-4">
                                <div className="flex items-center justify-end gap-4">
-                                 <button className="text-blue-400 hover:text-blue-300 font-black uppercase text-[10px] tracking-tight" onClick={() => setActivePair(`${asset.symbol}/USDT`)}>Trade</button>
+                                 <button className="text-brand hover:text-brand/80 font-black uppercase text-[10px] tracking-tight" onClick={() => setActivePair(`${asset.symbol}/USDT`)}>Trade</button>
                                  <button className="text-zinc-600 hover:text-zinc-300 font-black uppercase text-[10px] tracking-tight">TP/SL</button>
                                </div>
                             </td>
@@ -999,7 +999,7 @@ const SpotTrading: React.FC = () => {
                     </thead>
                     <tbody>
                       {tradeHistory.filter(t => t.pair === activePair).map((t) => (
-                        <tr key={t.id} className="border-b border-zinc-900/30">
+                        <tr key={t.id} className="border-b border-zinc-900/30 hover:bg-white/[0.05] transition-all group">
                           <td className="px-4 py-1.5 text-zinc-500 font-medium tabular-nums">{t.time}</td>
                           <td className="px-4 py-1.5 font-medium"><span className="font-bold text-white uppercase">{t.pair}</span></td>
                           <td className={`px-4 py-1.5 font-normal ${t.type === 'buy' ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>{t.type === 'buy' ? 'Buy' : 'Sell'}</td>

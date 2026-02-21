@@ -12,25 +12,24 @@ interface FAQItem {
 }
 
 export default function Referral({ isAffiliate = false }: ReferralProps) {
-  const { referralCode, referralCount, referralVolume, earnings, getTier, balances } = useExchangeStore();
+  const { referralCode, referralCount, referralVolume, earnings, getTier, balances, addNotification } = useExchangeStore();
   const currentTier = getTier();
   
   // Hero cards exclude Rookie as it's the default starting state
   const tiers: ReferralTier[] = ['Bronze', 'Silver', 'Gold', 'Platinum'];
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [isGoalsOpen, setIsGoalsOpen] = useState(false);
+  const [isQualifiedTooltipOpen, setIsQualifiedTooltipOpen] = useState(false);
   const goalsRef = useRef<HTMLDivElement>(null);
 
   // My Invites Tab State
   const [invitesTab, setInvitesTab] = useState('Invitation Overview');
   const [commissionFilter, setCommissionFilter] = useState('All');
 
-  // Brand Gradient style
-  const brandGradient = 'linear-gradient(90deg, #605cf4, #a855f7, #ec4899)';
-  const numberGradientStyle = {
-    background: brandGradient,
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
+  // Brand Color style
+  const brandColor = '#FD6818';
+  const numberStyle = {
+    color: brandColor,
   };
 
   // Logic for next tier goals
@@ -62,7 +61,11 @@ export default function Referral({ isAffiliate = false }: ReferralProps) {
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    alert(`${label} copied!`);
+    addNotification({
+      title: 'Copied to Clipboard',
+      message: `${label} has been copied successfully.`,
+      type: 'success'
+    });
   };
 
   const fullRefLink = `https://lintex.exchange/ref/${referralCode}`;
@@ -218,12 +221,28 @@ export default function Referral({ isAffiliate = false }: ReferralProps) {
                            <div className="flex justify-between items-center text-[13px] font-medium text-zinc-400">
                              <div className="flex items-center gap-1.5">
                                Invite <span className="text-white font-bold tabular-nums">{nextTierData.currentRefs} / {nextTierData.totalRefs}</span> eligible referrals
-                               <span className="w-3.5 h-3.5 rounded-full border border-zinc-700 flex items-center justify-center text-[8px] text-zinc-500 font-bold cursor-help">i</span>
+                               <div className="relative">
+                                 <span 
+                                   onMouseEnter={() => setIsQualifiedTooltipOpen(true)}
+                                   onMouseLeave={() => setIsQualifiedTooltipOpen(false)}
+                                   className="w-3.5 h-3.5 rounded-full border border-zinc-700 flex items-center justify-center text-[8px] text-zinc-500 font-bold cursor-help hover:border-zinc-500 hover:text-zinc-300 transition-colors"
+                                 >
+                                   i
+                                 </span>
+                                 
+                                 {/* Qualified Referral Tooltip */}
+                                 <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-4 bg-[#1a1c22] border border-zinc-800 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.6)] z-[110] transition-all duration-200 pointer-events-none ${isQualifiedTooltipOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'}`}>
+                                   <p className="text-[13px] leading-relaxed text-zinc-300">
+                                     <span className="text-white font-bold">Qualified Referral:</span> A referee who, within 7 days of their first deposit, has a cumulative net deposit of at least 100 USDT and completes at least one Futures trade.
+                                   </p>
+                                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-[#1a1c22] border-r border-b border-zinc-800"></div>
+                                 </div>
+                               </div>
                              </div>
                            </div>
                            <div className="h-1 bg-zinc-800 rounded-full overflow-hidden">
                              <div 
-                               className="h-full bg-blue-500 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]" 
+                               className="h-full bg-brand transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(253,104,24,0.5)]" 
                                style={{ width: `${Math.min(100, (nextTierData.currentRefs / nextTierData.totalRefs) * 100)}%` }}
                              ></div>
                            </div>
@@ -244,7 +263,7 @@ export default function Referral({ isAffiliate = false }: ReferralProps) {
                            </div>
                            <div className="h-1 bg-zinc-800 rounded-full overflow-hidden">
                              <div 
-                               className="h-full bg-blue-500 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]" 
+                               className="h-full bg-brand transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(253,104,24,0.5)]" 
                                style={{ width: `${Math.min(100, (nextTierData.currentVol / nextTierData.totalVol) * 100)}%` }}
                              ></div>
                            </div>
@@ -326,14 +345,14 @@ export default function Referral({ isAffiliate = false }: ReferralProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
             <div className="bg-[#0d0d0d] border border-white/5 rounded-[32px] p-12 relative group hover:border-white/10 transition-all flex flex-col items-start text-left">
               <div className="w-14 h-14 rounded-full bg-zinc-900 border border-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                <span className="text-2xl font-black" style={numberGradientStyle}>1</span>
+                <span className="text-2xl font-black" style={numberStyle}>1</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 tracking-tight">Invite friends</h3>
               <p className="text-zinc-500 text-lg font-medium leading-relaxed max-w-[340px]">Share your invite link or code with your friends.</p>
             </div>
             <div className="bg-[#0d0d0d] border border-white/5 rounded-[32px] p-12 relative group hover:border-white/10 transition-all flex flex-col items-start text-left">
               <div className="w-14 h-14 rounded-full bg-zinc-900 border border-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                <span className="text-2xl font-black" style={numberGradientStyle}>2</span>
+                <span className="text-2xl font-black" style={numberStyle}>2</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 tracking-tight">Get rewarded</h3>
               <p className="text-zinc-500 text-lg font-medium leading-relaxed max-w-[340px]">Once your friend completes their steps, you'll receive your reward.</p>
@@ -352,7 +371,7 @@ export default function Referral({ isAffiliate = false }: ReferralProps) {
             ].map(task => (
               <div key={task.id} className="bg-[#0d0d0d] border border-white/5 rounded-3xl p-10 group hover:border-white/10 transition-all flex flex-col items-start text-left min-h-[300px]">
                 <div className="w-14 h-14 rounded-full bg-zinc-900/50 border border-white/5 flex items-center justify-center mb-10">
-                  <span className="text-2xl font-black" style={numberGradientStyle}>{task.id}</span>
+                  <span className="text-2xl font-black" style={numberStyle}>{task.id}</span>
                 </div>
                 <h3 className="text-3xl font-bold mb-4 tracking-tight">{task.title}</h3>
                 <p className="text-zinc-500 text-lg font-medium leading-relaxed">{task.desc}</p>
@@ -458,7 +477,7 @@ export default function Referral({ isAffiliate = false }: ReferralProps) {
                               <p className="text-[12px] text-zinc-400 font-medium leading-relaxed mb-4">Copy your referral link to invite friends and earn more commissions.</p>
                               <button 
                                 onClick={() => copyToClipboard(fullRefLink, 'Referral Link')}
-                                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-full transition-all active:scale-95 shadow-lg"
+                                className="px-6 py-2.5 bg-brand hover:bg-brand/80 text-white font-black text-xs rounded-full transition-all active:scale-95 shadow-lg"
                               >
                                 Copy & Invite
                               </button>

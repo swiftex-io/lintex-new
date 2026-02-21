@@ -2,12 +2,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useExchangeStore } from '../store';
 
-declare global {
-  interface Window {
-    VANTA: any;
-  }
-}
-
 type EarnCategory = 'Simple Earn' | 'Staking' | 'ETH Staking' | 'Dual Investment';
 
 interface StakeModalProps {
@@ -102,7 +96,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
                 <span className="text-xs font-bold text-zinc-500">{asset.symbol}</span>
                 <button 
                   onClick={() => setAmount(assetBalance.toString())}
-                  className="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-xs font-bold text-brand hover:text-brand/80 transition-colors"
                 >
                   Max
                 </button>
@@ -113,7 +107,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
                 <span className="text-zinc-500">Available Spot balance</span>
                 <span className="text-white flex items-center gap-1 tabular-nums">
                   {assetBalance.toLocaleString()} {asset.symbol}
-                  <svg className="w-3 h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                  <svg className="w-3 h-3 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
                 </span>
               </div>
               <div className="flex justify-between">
@@ -175,11 +169,11 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
               onChange={(e) => setAgreed(e.target.checked)} 
               className="sr-only"
             />
-            <div className={`w-4 h-4 rounded border-2 transition-all flex items-center justify-center ${agreed ? 'bg-blue-500 border-blue-500' : 'border-zinc-700 group-hover:border-zinc-500'}`}>
+            <div className={`w-4 h-4 rounded border-2 transition-all flex items-center justify-center ${agreed ? 'bg-brand border-brand' : 'border-zinc-700 group-hover:border-zinc-500'}`}>
               {agreed && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m5 13 4 4L19 7"/></svg>}
             </div>
             <span className="text-[12px] font-medium text-zinc-400">
-              I have read and agree to the <span className="text-blue-400">Quilex Earn Service Agreement</span>
+              I have read and agree to the <span className="text-brand">Quilex Earn Service Agreement</span>
             </span>
           </label>
 
@@ -210,8 +204,6 @@ const SimpleEarn: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const vantaRef = useRef<HTMLDivElement>(null);
-  const vantaEffectRef = useRef<any>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const earnTabs: EarnCategory[] = ['Simple Earn', 'Staking', 'ETH Staking', 'Dual Investment'];
@@ -224,56 +216,6 @@ const SimpleEarn: React.FC = () => {
     { symbol: 'ADA', name: 'Cardano', apr: '12.00%', term: '7 Day(s)' },
     { symbol: 'AVAX', name: 'Avalanche', apr: '18.00%', term: '7 Day(s)' },
   ];
-
-  useEffect(() => {
-    const initVanta = () => {
-      if (!vantaEffectRef.current && vantaRef.current && window.VANTA) {
-        vantaEffectRef.current = window.VANTA.DOTS({
-          el: vantaRef.current,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200.00,
-          minWidth: 200.00,
-          scale: 1.00,
-          scaleMobile: 1.00,
-          color: 0xd7ff20,
-          color2: 0x444444,
-          size: 2.50,
-          spacing: 35.00,
-          showLines: false,
-          backgroundColor: 0x000000
-        });
-      }
-    };
-
-    const destroyVanta = () => {
-      if (vantaEffectRef.current) {
-        vantaEffectRef.current.destroy();
-        vantaEffectRef.current = null;
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          initVanta();
-        } else {
-          destroyVanta();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (vantaRef.current) {
-      observer.observe(vantaRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-      destroyVanta();
-    };
-  }, []);
 
   useEffect(() => {
     if (isCarouselHovered) return;
@@ -360,7 +302,7 @@ const SimpleEarn: React.FC = () => {
   }, [earnProducts, currentPage]);
 
   return (
-    <div className="bg-black min-h-screen text-white pb-32 selection:bg-[#d7ff20]/20">
+    <div className="bg-black min-h-screen text-white pb-32 selection:bg-brand/20">
       <div className="bg-[#0a0a0a] border-b border-zinc-900 px-8 sticky top-0 z-[45] backdrop-blur-xl">
         <div className="max-w-[1400px] mx-auto flex gap-8 overflow-x-auto no-scrollbar">
           {earnTabs.map((tab) => (
@@ -379,16 +321,16 @@ const SimpleEarn: React.FC = () => {
         </div>
       </div>
 
-      <div ref={vantaRef} className="relative pt-24 pb-24 px-8 md:px-12 flex flex-col items-center text-center overflow-hidden">
+      <div className="relative pt-24 pb-24 px-8 md:px-12 flex flex-col items-center text-center overflow-hidden">
         <div className="absolute inset-0 bg-black/60 pointer-events-none"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gradient-to-b from-[#d7ff20]/10 via-transparent to-transparent blur-[120px] pointer-events-none opacity-40"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gradient-to-b from-brand/10 via-transparent to-transparent blur-[120px] pointer-events-none opacity-40"></div>
 
         <div className="relative z-10 max-w-[1400px] w-full mx-auto animate-in fade-in zoom-in-95 duration-1000">
           <div className="mb-3 text-[14px] font-bold uppercase tracking-[0.8em] opacity-40 ml-[0.8em]">QUILEX</div>
           <h1 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter leading-none text-white">
             {activeEarnTab}
           </h1>
-          <p className="text-lg md:text-xl font-light text-[#d7ff20] mb-8 tracking-wide opacity-90">
+          <p className="text-lg md:text-xl font-light text-brand mb-8 tracking-wide opacity-90">
             {activeEarnTab === 'Dual Investment' ? 'Up to 120% APR' : 'Stable yields for your assets'}
           </p>
           
@@ -525,7 +467,7 @@ const SimpleEarn: React.FC = () => {
                            <img src={`https://assets.coincap.io/assets/icons/${product.symbol.toLowerCase()}@2x.png`} className="w-full h-full object-cover" alt="" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[13px] font-medium text-white group-hover:text-[#d7ff20] transition-colors">{product.symbol}</span>
+                          <span className="text-[13px] font-medium text-white group-hover:text-brand transition-colors">{product.symbol}</span>
                           <span className="text-[9px] text-zinc-600 font-normal uppercase tracking-tight">{product.name}</span>
                         </div>
                       </div>
@@ -544,7 +486,7 @@ const SimpleEarn: React.FC = () => {
                     </td>
                     <td className="px-8 py-5 text-right">
                       <div className="flex items-center justify-end gap-3">
-                        <button className="px-6 py-2 bg-white text-black text-[13px] font-bold rounded-full hover:bg-[#d7ff20] transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 tracking-tight shadow-xl">
+                        <button className="px-6 py-2 bg-white text-black text-[13px] font-bold rounded-full hover:bg-brand transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 tracking-tight shadow-xl">
                           Stake
                         </button>
                         <svg className="w-4 h-4 text-zinc-800 transition-colors group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
@@ -606,7 +548,7 @@ const SimpleEarn: React.FC = () => {
                 {activeEarnTab} is a premier product that provides {activeEarnTab === 'Simple Earn' ? 'flexible or fixed terms' : 'staking rewards'} with daily payouts. Your assets are managed through institutional-grade protocols to ensure consistent yield generation.
               </p>
             </div>
-            <button className="text-[#d7ff20] text-[10px] font-semibold uppercase tracking-[0.2em] flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
+            <button className="text-brand text-[10px] font-semibold uppercase tracking-[0.2em] flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
               Learn more about yield <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
@@ -617,7 +559,7 @@ const SimpleEarn: React.FC = () => {
                 Your principal is protected by Quilex. We use industry-standard risk management frameworks to ensure that rewards are distributed consistently while maintaining 100% solvency of the pool.
               </p>
             </div>
-            <button className="text-[#d7ff20] text-[10px] font-semibold uppercase tracking-[0.2em] flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
+            <button className="text-brand text-[10px] font-semibold uppercase tracking-[0.2em] flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
               Review safety report <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>

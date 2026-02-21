@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useExchangeStore } from '../store';
+import { motion } from 'motion/react';
 
 interface HomeProps {
   onTrade: () => void;
@@ -68,45 +69,84 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
   );
 
   return (
-    <div className="flex flex-col items-center bg-black px-6 pb-20">
-      <div className="max-w-6xl w-full text-center pt-24">
-        {/* Main Hero Header */}
-        <h1 className="text-6xl md:text-8xl font-black mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent tracking-tighter">
-          The Next Gen Exchange.
-        </h1>
-        <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto font-medium">
-          Trade Bitcoin, Ethereum, and over 100+ cryptocurrencies on Lintex with the lowest fees and the most advanced tools.
-        </p>
+    <div className="flex flex-col items-center bg-black px-6 pb-20 overflow-hidden">
+      {/* Hero Section */}
+      <div className="relative w-full min-h-[90vh] flex flex-col items-center justify-center pt-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(253,104,24,0.1),transparent_50%)] pointer-events-none"></div>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-24">
-          <button 
-            onClick={onTrade}
-            className="px-8 py-4 bg-white text-black font-bold rounded-full text-base hover:bg-gray-200 transition-all transform hover:scale-105"
+        <div className="max-w-6xl w-full text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.2, 0, 0, 1] }}
           >
-            Trade Now
-          </button>
-          <button className="px-8 py-4 bg-zinc-900 text-white font-bold rounded-full text-base border border-gray-800 hover:bg-zinc-800 transition-all">
-            Learn More
-          </button>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Live on Mainnet</span>
+            </div>
+            
+            <h1 className="text-7xl md:text-[120px] font-black mb-8 leading-[0.85] tracking-tighter text-white">
+              THE NEXT GEN<br />
+              <span className="text-brand">EXCHANGE.</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
+              Trade Bitcoin, Ethereum, and 100+ assets with institutional-grade tools and the lowest fees in the industry.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-24">
+              <button 
+                onClick={onTrade}
+                className="group px-10 py-5 bg-white text-white font-black rounded-full text-lg overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)] apr-badge-glow hover:shadow-[0_0_25px_rgba(253,104,24,0.4)]"
+              >
+                <span className="rolling-text-container relative -top-[0.5px]">
+                  <span className="rolling-text-inner">
+                    <span className="block">Trade Now</span>
+                    <span className="block">Trade Now</span>
+                  </span>
+                </span>
+              </button>
+              <button className="px-10 py-5 bg-transparent text-white font-black rounded-full text-lg border border-white/20 hover:bg-white/5 transition-all backdrop-blur-sm">
+                <span className="rolling-text-container relative -top-[0.5px]">
+                  <span className="rolling-text-inner">
+                    <span className="block">View Markets</span>
+                    <span className="block">View Markets</span>
+                  </span>
+                </span>
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl w-full relative z-10 -mt-20">
+        {/* Hero Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center bg-[#050505]/80 backdrop-blur-2xl border border-white/5 rounded-[32px] p-12 mb-24 shadow-2xl">
+          <div>
+            <div className="text-4xl font-black mb-1 tracking-tighter">$2.4B+</div>
+            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">24h Volume</div>
+          </div>
+          <div>
+            <div className="text-4xl font-black mb-1 tracking-tighter">0.1%</div>
+            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">Trading Fee</div>
+          </div>
+          <div>
+            <div className="text-4xl font-black mb-1 tracking-tighter">20M+</div>
+            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">Users</div>
+          </div>
+          <div>
+            <div className="text-4xl font-black mb-1 tracking-tighter">100%</div>
+            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">Reserves</div>
+          </div>
         </div>
 
-        {/* Hero Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center border-t border-gray-900 pt-12 mb-16">
-          <div>
-            <div className="text-3xl font-bold mb-1">$2.4B+</div>
-            <div className="text-gray-500 text-sm font-semibold">24h Volume</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold mb-1">0.1%</div>
-            <div className="text-gray-500 text-sm font-semibold">Trading Fee</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold mb-1">20M+</div>
-            <div className="text-gray-500 text-sm font-semibold">Users Worldwide</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold mb-1">100%</div>
-            <div className="text-gray-500 text-sm font-semibold">Proof of Reserves</div>
+        {/* Trust Section */}
+        <div className="mb-24 text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-8">Trusted by industry leaders</p>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+            {['Binance', 'Coinbase', 'Kraken', 'Bybit', 'OKX'].map(partner => (
+              <div key={partner} className="text-xl font-black tracking-tighter text-white">{partner}</div>
+            ))}
           </div>
         </div>
 
@@ -114,7 +154,7 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           
           {/* Box 1: Hot crypto */}
-          <div className="bg-[#111111] rounded-xl p-6 group">
+          <div className="bg-[#0d0d0d] border border-white/5 rounded-2xl p-6 group hover:border-white/10 transition-all">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-[14px] font-bold text-white tracking-tight flex items-center gap-1">
                 Hot crypto <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path d="M9 5l7 7-7 7"/></svg>
@@ -150,7 +190,7 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
           </div>
 
           {/* Box 2: New listings */}
-          <div className="bg-[#111111] rounded-xl p-6 group">
+          <div className="bg-[#0d0d0d] border border-white/5 rounded-2xl p-6 group hover:border-white/10 transition-all">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-[14px] font-bold text-white tracking-tight flex items-center gap-1">
                 New listings <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path d="M9 5l7 7-7 7"/></svg>
@@ -190,7 +230,7 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
           </div>
 
           {/* Box 3: Macro data */}
-          <div className="bg-[#111111] rounded-xl p-6 group">
+          <div className="bg-[#0d0d0d] border border-white/5 rounded-2xl p-6 group hover:border-white/10 transition-all">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-[14px] font-bold text-white tracking-tight flex items-center gap-1">
                 Macro data <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path d="M9 5l7 7-7 7"/></svg>

@@ -216,7 +216,7 @@ const OrderBook: React.FC<OrderBookProps> = ({ currentPrice = 65432.50, onPriceS
                       key={i} 
                       onClick={() => onPriceSelect?.(displayPrice)}
                       className={`grid grid-cols-3 px-3 py-[2.5px] relative group cursor-pointer transition-colors duration-300 ${
-                        ask.flash === 'up' ? 'bg-[#ff4d4f]/20' : ask.flash === 'down' ? 'bg-white/5' : 'hover:bg-zinc-900/30'
+                        ask.flash === 'up' ? 'bg-[#ff4d4f]/20' : ask.flash === 'down' ? 'bg-white/5' : 'hover:bg-white/[0.07]'
                       }`}
                     >
                       <div 
@@ -261,7 +261,7 @@ const OrderBook: React.FC<OrderBookProps> = ({ currentPrice = 65432.50, onPriceS
                       key={i} 
                       onClick={() => onPriceSelect?.(displayPrice)}
                       className={`grid grid-cols-3 px-3 py-[2.5px] relative group cursor-pointer transition-colors duration-300 ${
-                        bid.flash === 'up' ? 'bg-[#00d18e]/20' : bid.flash === 'down' ? 'bg-white/5' : 'hover:bg-zinc-900/30'
+                        bid.flash === 'up' ? 'bg-[#00d18e]/20' : bid.flash === 'down' ? 'bg-white/5' : 'hover:bg-white/[0.07]'
                       }`}
                     >
                       <div 
@@ -286,7 +286,7 @@ const OrderBook: React.FC<OrderBookProps> = ({ currentPrice = 65432.50, onPriceS
           /* Last Trades Tab Content */
           <div className="flex flex-col overflow-hidden">
             {marketTrades.map((trade) => (
-              <div key={trade.id} className="grid grid-cols-3 px-3 py-[3px] hover:bg-zinc-900/30 transition-colors animate-in fade-in slide-in-from-top-1 duration-500">
+              <div key={trade.id} className="grid grid-cols-3 px-3 py-[3px] hover:bg-white/[0.07] transition-colors animate-in fade-in slide-in-from-top-1 duration-500">
                 <span className={`font-medium tabular-nums text-[11px] ${trade.side === 'buy' ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>
                   {trade.price.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
                 </span>

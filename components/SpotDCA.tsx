@@ -66,7 +66,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
               <h3 className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest">DCA Tokens</h3>
               <button 
                 onClick={handleAddToken}
-                className="text-[12px] font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors"
+                className="text-[12px] font-bold text-brand hover:text-brand/80 flex items-center gap-1.5 transition-colors"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 5v14M5 12h14"/></svg>
                 Add Token
@@ -138,7 +138,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
               </div>
             </div>
             <label className="flex items-center gap-3 pt-2 cursor-pointer group">
-              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${startImmediately ? 'bg-blue-500 border-blue-500' : 'border-zinc-700'}`}>
+              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${startImmediately ? 'bg-brand border-brand' : 'border-zinc-700'}`}>
                 <input type="checkbox" className="hidden" checked={startImmediately} onChange={() => setStartImmediately(!startImmediately)} />
                 {startImmediately && <svg className="text-white w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m5 13 4 4L19 7"/></svg>}
               </div>
@@ -162,7 +162,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
             <div className="flex items-center gap-2 text-[12px] font-bold">
               <span className="text-zinc-500">Available</span>
               <span className="text-white tabular-nums">{usdtBalance.toLocaleString()} USDT</span>
-              <button className="text-blue-500 hover:text-blue-400 transition-colors">
+              <button className="text-brand hover:text-brand/80 transition-colors">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
               </button>
             </div>
@@ -179,7 +179,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
           <button 
             disabled={remainingAllocation !== 0 || !amount}
             onClick={onClose}
-            className="w-full py-5 bg-blue-500 hover:bg-blue-400 text-white font-black rounded-full text-sm uppercase tracking-tight shadow-2xl transition-all active:scale-[0.98] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed"
+            className="w-full py-5 bg-brand hover:bg-brand/80 text-white font-black rounded-full text-sm uppercase tracking-tight shadow-2xl transition-all active:scale-[0.98] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed"
           >
             Create Plan
           </button>

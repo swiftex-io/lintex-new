@@ -118,14 +118,14 @@ const Assets: React.FC = () => {
                 <span>Total Assets Value</span>
               </div>
               <div className="flex flex-col sm:flex-row items-baseline gap-4 mb-4">
-                <span className="text-2xl md:text-4xl font-medium tracking-tighter text-white">${totalBalanceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                <span className="text-base md:text-lg font-medium text-zinc-500 tracking-tight">≈ {totalInBTC.toFixed(6)} BTC</span>
+                <span className="text-2xl md:text-4xl font-primary font-medium tracking-tighter text-white">${totalBalanceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <span className="text-base md:text-lg font-primary font-medium text-zinc-500 tracking-tight">≈ {totalInBTC.toFixed(6)} BTC</span>
               </div>
               
               <div className="flex items-center gap-3 text-[13px] font-semibold">
                 <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full">
                   <span className="text-zinc-500 font-medium">Today's PNL:</span>
-                  <span className={`${pnlAmount >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'} flex items-center gap-1`}>
+                  <span className={`${pnlAmount >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'} flex items-center gap-1 font-primary`}>
                     {pnlAmount >= 0 ? '+' : ''}${Math.abs(pnlAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     <span className="text-[11px] opacity-80">
                       ({pnlAmount >= 0 ? '+' : ''}{pnlPercentage.toFixed(2)}%)
@@ -180,15 +180,15 @@ const Assets: React.FC = () => {
                   </td>
                   <td className="px-8 py-5">
                     <div className="flex flex-col">
-                      <span className="font-mono text-xs text-white">{asset.balance.toLocaleString(undefined, { minimumFractionDigits: 4 })}</span>
-                      <span className="text-[10px] text-gray-500 font-medium mt-0.5">${(asset.balance * asset.price).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className="font-primary text-xs text-white">{asset.balance.toLocaleString(undefined, { minimumFractionDigits: 4 })}</span>
+                      <span className="text-[10px] text-gray-500 font-primary font-medium mt-0.5">${(asset.balance * asset.price).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
                   </td>
                   <td className="px-8 py-5">
-                    <span className="font-mono text-xs text-zinc-500">{(asset.balance - asset.available).toLocaleString(undefined, { minimumFractionDigits: 4 })}</span>
+                    <span className="font-primary text-xs text-zinc-500">{(asset.balance - asset.available).toLocaleString(undefined, { minimumFractionDigits: 4 })}</span>
                   </td>
                   <td className="px-8 py-5">
-                    <span className="font-mono text-xs text-white">{asset.available.toLocaleString(undefined, { minimumFractionDigits: 4 })}</span>
+                    <span className="font-primary text-xs text-white">{asset.available.toLocaleString(undefined, { minimumFractionDigits: 4 })}</span>
                   </td>
                   <td className="px-8 py-5 text-right">
                     <button className="px-6 py-1.5 bg-white text-black text-[13px] font-bold rounded-full hover:bg-zinc-200 transition-all shadow-lg">Trade</button>
@@ -226,11 +226,11 @@ const Assets: React.FC = () => {
             <div className="grid grid-cols-2 gap-8">
               <div>
                 <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Maker fee</div>
-                <div className="text-2xl font-bold text-white tracking-tight">0.2000%</div>
+                <div className="text-2xl font-primary font-bold text-white tracking-tight">0.2000%</div>
               </div>
               <div>
                 <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Taker fee</div>
-                <div className="text-2xl font-bold text-white tracking-tight">0.3500%</div>
+                <div className="text-2xl font-primary font-bold text-white tracking-tight">0.3500%</div>
               </div>
             </div>
           </div>
@@ -243,7 +243,7 @@ const Assets: React.FC = () => {
         </div>
         <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
           <span className="text-[13px] font-bold text-zinc-500">24-hour withdrawal limit</span>
-          <span className="text-xl font-bold text-white">10,000,000 USD</span>
+          <span className="text-xl font-primary font-bold text-white">10,000,000 USD</span>
         </div>
       </div>
 
@@ -286,15 +286,15 @@ const Assets: React.FC = () => {
                 <tbody className="divide-y divide-zinc-900">
                   <tr className="bg-white/[0.02]">
                     <td className="px-8 py-6 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                      <span className="w-2 h-2 rounded-full bg-brand"></span>
                       <span className="text-sm font-bold text-white">Regular user</span>
                     </td>
-                    <td className="px-8 py-6 text-sm font-medium text-zinc-300">0 - 100,000</td>
+                    <td className="px-8 py-6 text-sm font-primary font-medium text-zinc-300">0 - 100,000</td>
                     <td className="px-4 py-6 text-center text-zinc-600">/</td>
-                    <td className="px-8 py-6 text-sm font-medium text-zinc-300">0 - 100,000</td>
-                    <td className="px-8 py-6 text-sm font-bold text-white">0.2000%</td>
-                    <td className="px-8 py-6 text-sm font-bold text-white">0.3500%</td>
-                    <td className="px-8 py-6 text-sm font-bold text-white text-right">10,000,000</td>
+                    <td className="px-8 py-6 text-sm font-primary font-medium text-zinc-300">0 - 100,000</td>
+                    <td className="px-8 py-6 text-sm font-primary font-bold text-white">0.2000%</td>
+                    <td className="px-8 py-6 text-sm font-primary font-bold text-white">0.3500%</td>
+                    <td className="px-8 py-6 text-sm font-primary font-bold text-white text-right">10,000,000</td>
                   </tr>
                 </tbody>
               </table>

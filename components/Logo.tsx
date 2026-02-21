@@ -10,15 +10,8 @@ const Logo: React.FC<LogoProps> = ({ className = "h-8" }) => {
       <svg width="100%" height="100%" viewBox="0 0 686 149" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style={{ fillRule: 'evenodd', clipRule: 'evenodd', strokeLinejoin: 'round', strokeMiterlimit: 2 }}>
         <defs>
           <linearGradient id="logo-symbol-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#605cf4">
-              <animate attributeName="stop-color" values="#605cf4;#a855f7;#ec4899;#605cf4" dur="4s" repeatCount="indefinite" />
-            </stop>
-            <stop offset="50%" stopColor="#a855f7">
-              <animate attributeName="stop-color" values="#a855f7;#ec4899;#605cf4;#a855f7" dur="4s" repeatCount="indefinite" />
-            </stop>
-            <stop offset="100%" stopColor="#ec4899">
-              <animate attributeName="stop-color" values="#ec4899;#605cf4;#a855f7;#ec4899" dur="4s" repeatCount="indefinite" />
-            </stop>
+            <stop offset="0%" stopColor="#FD6818" />
+            <stop offset="100%" stopColor="#FD6818" />
           </linearGradient>
         </defs>
         <g transform="matrix(1,0,0,1,-1476.195579,-1741.487654)">

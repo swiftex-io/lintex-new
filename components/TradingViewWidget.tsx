@@ -47,11 +47,8 @@ const TradingViewWidget: React.FC = () => {
             "MAExp@tv-basicstudies"    // EMA
           ],
           "studies_overrides": {
-            "volume.show_last_value": false,
             "moving average.precision": 2,
-            "moving average.styles.plot.color": "#00d18e", // Zelena za SMA
-            "moving average exponential.precision": 2,
-            "moving average exponential.styles.plot.color": "#ff4d4f" // Crvena za EMA
+            "moving average exponential.precision": 2
           },
           "overrides": {
             "paneProperties.background": "#000000",
@@ -59,10 +56,7 @@ const TradingViewWidget: React.FC = () => {
             "paneProperties.horzGridProperties.color": "#131722",
             "symbolWatermarkProperties.transparency": 90,
             "scalesProperties.textColor": "#AAA",
-            "scalesProperties.showCountdown": false, // Eksplicitno isključeno
             "scalesProperties.showSymbolLabels": true, 
-            "scalesProperties.showStudyLastValue": false,
-            "mainSeriesProperties.showCountdown": false, // Eksplicitno isključeno
             "mainSeriesProperties.candleStyle.drawWick": true,
             "mainSeriesProperties.candleStyle.drawBorder": true,
             "paneProperties.legendProperties.showStudyArguments": false,

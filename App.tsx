@@ -14,28 +14,17 @@ import SpotDCA from './components/SpotDCA';
 import { useExchangeStore } from './store';
 
 const NotificationToast: React.FC<{ notification: Notification; onDismiss: (id: string) => void }> = ({ notification, onDismiss }) => {
-  const [progress, setProgress] = useState(100);
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    const startTime = Date.now();
     const duration = 5000;
     
-    // Timer for the progress bar
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
-      setProgress(remaining);
-      if (remaining <= 0) clearInterval(interval);
-    }, 10);
-
-    // Auto-trigger exit animation shortly before removal
+    // Trigger exit animation 300ms before the notification is removed from the store
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 4700);
+    }, duration - 300);
 
     return () => {
-      clearInterval(interval);
       clearTimeout(exitTimer);
     };
   }, []);
@@ -49,7 +38,7 @@ const NotificationToast: React.FC<{ notification: Notification; onDismiss: (id: 
   const getIcon = () => {
     switch (notification.type) {
       case 'success': return <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-[#00d18e] shadow-sm"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m20 6-11 11-5-5"/></svg></div>;
-      case 'info': return <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>;
+      case 'info': return <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-600 shadow-sm"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>;
       case 'warning': return <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 shadow-sm"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 8v4M12 16h.01M22 12A10 10 0 1 1 2 12a10 10 0 0 1 20 0z"/></svg></div>;
       default: return null;
     }
@@ -70,10 +59,7 @@ const NotificationToast: React.FC<{ notification: Notification; onDismiss: (id: 
         </div>
       </div>
       <div className="h-1 bg-zinc-50 w-full relative">
-        <div 
-          className="h-full bg-gradient-to-r from-blue-500 to-zinc-400 transition-all ease-linear" 
-          style={{ width: `${progress}%` }}
-        ></div>
+        <div className="h-full bg-brand animate-progress"></div>
       </div>
     </div>
   );
@@ -229,7 +215,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col selection:bg-blue-500/30">
+    <div className="min-h-screen bg-black text-white flex flex-col selection:bg-brand/30">
       <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
       
       {tickerPosition === 'top' && TickerStrip}

@@ -43,8 +43,8 @@ const TradeChart: React.FC = () => {
            ))}
          </div>
          <div className="flex items-center gap-4 text-[10px] font-bold text-gray-500">
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span> MA(5): { (btcPrice * 0.999).toFixed(2) }</span>
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> MA(10): { (btcPrice * 0.997).toFixed(2) }</span>
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span> MA(5): { (btcPrice * 0.999).toFixed(2) }</span>
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-brand"></span> MA(10): { (btcPrice * 0.997).toFixed(2) }</span>
          </div>
        </div>
        

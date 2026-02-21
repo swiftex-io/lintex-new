@@ -287,7 +287,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
             >
               {tab.label}
               {tab.soon && (
-                <span className="bg-blue-500/10 text-blue-500 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Soon</span>
+                <span className="bg-brand/10 text-brand text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Soon</span>
               )}
             </button>
           ))}
@@ -475,7 +475,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
                     <span className="text-[11px] font-bold text-zinc-700 w-3">{idx + 1}</span>
                     <TokenLogo symbol={asset.symbol} />
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-white group-hover/row:text-blue-400 transition-colors">{asset.symbol}<span className="text-zinc-600">/USDT</span></span>
+                      <span className="text-sm font-bold text-white group-hover/row:text-brand transition-colors">{asset.symbol}<span className="text-zinc-600">/USDT</span></span>
                       <span className="text-[9px] text-zinc-700 font-bold tracking-tight">${(Math.random() * 2).toFixed(2)}B</span>
                     </div>
                   </div>
@@ -490,15 +490,15 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
               ))}
               
               {cat.hasCta && (
-                <div className="grid grid-cols-12 items-center bg-blue-500/5 border border-dashed border-blue-500/20 -mx-2 mt-2 p-3 rounded-lg cursor-pointer hover:bg-blue-500/10 transition-all group/cta">
+                <div className="grid grid-cols-12 items-center bg-brand/5 border border-dashed border-brand/20 -mx-2 mt-2 p-3 rounded-lg cursor-pointer hover:bg-brand/10 transition-all group/cta">
                   <div className="col-span-8 flex items-center gap-3">
-                    <span className="text-[11px] font-bold text-blue-500/50 w-3">5</span>
-                    <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 border-2 border-blue-500/30">
+                    <span className="text-[11px] font-bold text-brand/50 w-3">5</span>
+                    <div className="w-6 h-6 rounded-full bg-brand/20 flex items-center justify-center text-brand border-2 border-brand/30">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><path d="M12 5v14M5 12h14"/></svg>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[13px] font-bold text-blue-400">Promote your coin</span>
-                      <span className="text-[9px] text-blue-500/60 font-bold tracking-tight uppercase">Get listed here</span>
+                      <span className="text-[13px] font-bold text-brand">Promote your coin</span>
+                      <span className="text-[9px] text-brand/60 font-bold tracking-tight uppercase">Get listed here</span>
                     </div>
                   </div>
                   <div className="col-span-4 text-right">

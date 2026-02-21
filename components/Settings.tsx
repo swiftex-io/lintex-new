@@ -220,7 +220,7 @@ const Settings: React.FC = () => {
              </div>
           </div>
           <div>
-             <h2 className="text-3xl font-bold mb-1 tracking-tight">Security level: <span className="text-orange-500">Moderate</span></h2>
+             <h2 className="text-3xl font-bold mb-1 tracking-tight">Security level: <span className="text-brand">Moderate</span></h2>
              <p className="text-zinc-500 text-sm mb-4">Strengthen your security now to protect your assets.</p>
              <button className="bg-white text-black text-xs font-bold px-4 py-2 rounded-lg hover:bg-zinc-200 transition-all">Improve security</button>
           </div>
@@ -242,7 +242,7 @@ const Settings: React.FC = () => {
                      <div>
                         <div className="flex items-center gap-2 mb-1">
                            <span className="text-sm font-bold">{row.label}</span>
-                           {row.badge && <span className="bg-lime-400 text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-tighter">{row.badge}</span>}
+                           {row.badge && <span className="bg-brand text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-tighter">{row.badge}</span>}
                         </div>
                         <div className="text-xs text-zinc-500 font-medium leading-relaxed max-w-md">{row.desc}</div>
                      </div>
@@ -385,7 +385,7 @@ const Settings: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white/10 selection:text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-brand/20 selection:text-white">
       {/* Settings Tab Navigation - Fiksiran na top-0 jer main kontejner počinje posle headera */}
       <div className="bg-[#0a0a0a] border-b border-zinc-900 px-8 sticky top-0 z-[45] backdrop-blur-xl">
         <div className="max-w-[1400px] mx-auto flex gap-8 overflow-x-auto no-scrollbar">
