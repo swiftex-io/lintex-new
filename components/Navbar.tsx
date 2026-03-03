@@ -102,7 +102,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
         <div className="hidden md:flex items-center gap-8 text-[14px] font-medium tracking-tight h-full">
           {/* Trade Dropdown */}
-          <div className="relative h-full flex items-center" onMouseEnter={() => setIsTradeOpen(true)} onMouseLeave={() => setIsTradeOpen(false)}>
+          <div className="relative h-full flex items-center" onMouseEnter={() => { setIsTradeOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsTradeOpen(false)}>
             <button onClick={() => onNavigate(Page.TRADE)} className={`transition-all hover:text-white flex items-center gap-1.5 h-full ${currentPage === Page.TRADE ? 'text-white' : 'text-gray-400'}`}>
               Trade
               <svg className={`w-3 h-3 transition-transform duration-300 ${isTradeOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m6 9 6 6 6-6"/></svg>
@@ -138,7 +138,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           </div>
 
           {/* Markets Dropdown */}
-          <div className="relative h-full flex items-center" onMouseEnter={() => setIsMarketsOpen(true)} onMouseLeave={() => setIsMarketsOpen(false)}>
+          <div className="relative h-full flex items-center" onMouseEnter={() => { setIsMarketsOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsMarketsOpen(false)}>
             <button onClick={() => onNavigate(Page.MARKETS)} className={`transition-all hover:text-white flex items-center gap-1.5 h-full ${currentPage === Page.MARKETS ? 'text-white' : 'text-gray-400'}`}>
               Markets
               <svg className={`w-3 h-3 transition-transform duration-300 ${isMarketsOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m6 9 6 6 6-6"/></svg>
@@ -168,7 +168,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           </div>
 
           {/* Earn Dropdown */}
-          <div className="relative h-full flex items-center" onMouseEnter={() => setIsEarnNavOpen(true)} onMouseLeave={() => setIsEarnNavOpen(false)}>
+          <div className="relative h-full flex items-center" onMouseEnter={() => { setIsEarnNavOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsEarnNavOpen(false)}>
             <button className={`transition-all hover:text-white flex items-center gap-1.5 h-full text-gray-400`}>
               Earn
               <span className="ml-1 hidden xl:inline-flex items-center justify-center apr-badge-glow text-white text-[11px] font-black px-1.5 rounded-full tracking-tighter whitespace-nowrap overflow-hidden h-[21px] min-w-[78px]">
@@ -203,7 +203,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           </div>
 
           {/* Learn Dropdown */}
-          <div className="relative h-full flex items-center" onMouseEnter={() => setIsLearnOpen(true)} onMouseLeave={() => setIsLearnOpen(false)}>
+          <div className="relative h-full flex items-center" onMouseEnter={() => { setIsLearnOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsLearnOpen(false)}>
             <button className={`transition-all hover:text-white flex items-center gap-1.5 h-full text-gray-400`}>
               Learn
               <svg className={`w-3 h-3 transition-transform duration-300 ${isLearnOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="m6 9 6 6 6-6"/></svg>
@@ -409,7 +409,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </span>
               </button>
 
-              <div className="relative h-16 flex items-center" onMouseEnter={() => setIsWalletOpen(true)} onMouseLeave={() => setIsWalletOpen(false)}>
+              <div className="relative h-16 flex items-center" onMouseEnter={() => { setIsWalletOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsWalletOpen(false)}>
                 <button onClick={() => onNavigate(Page.ASSETS)} className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 hover:bg-zinc-800 hover:text-white ${isWalletOpen ? 'bg-zinc-800 text-white' : (currentPage === Page.ASSETS ? 'text-white' : 'text-gray-400')}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
                   <span className="hidden xl:block text-[11px] font-semibold tracking-tight">Wallet</span>
@@ -447,7 +447,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </div>
               </div>
 
-              <div className="relative h-16 flex items-center" onMouseEnter={() => setIsUserOpen(true)} onMouseLeave={() => setIsUserOpen(false)}>
+              <div className="relative h-16 flex items-center" onMouseEnter={() => { setIsUserOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsUserOpen(false)}>
                 <button onClick={() => onNavigate(Page.SETTINGS)} className={`p-2.5 rounded-xl transition-all flex items-center justify-center hover:bg-zinc-800 hover:text-white ${isUserOpen ? 'bg-zinc-800 text-white' : (currentPage === Page.SETTINGS ? 'text-white' : 'text-gray-400')}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </button>
@@ -488,7 +488,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
               <div className="h-6 w-[1px] bg-zinc-600/60 mx-2 hidden sm:block"></div>
               
-              <div className="relative h-16 flex items-center hidden sm:flex" onMouseEnter={() => setIsSupportOpen(true)} onMouseLeave={() => setIsSupportOpen(false)}>
+              <div className="relative h-16 flex items-center hidden sm:flex" onMouseEnter={() => { setIsSupportOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsSupportOpen(false)}>
                 <button className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 ${isSupportOpen ? 'text-white bg-zinc-800' : 'text-gray-400 hover:text-white hover:bg-zinc-800'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 </button>
@@ -506,7 +506,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </div>
               </div>
 
-              <div className="relative h-16 flex items-center hidden sm:flex" onMouseEnter={() => setIsLanguageOpen(true)} onMouseLeave={() => setIsLanguageOpen(false)}>
+              <div className="relative h-16 flex items-center hidden sm:flex" onMouseEnter={() => { setIsLanguageOpen(true); setIsSearchOpen(false); }} onMouseLeave={() => setIsLanguageOpen(false)}>
                 <button className={`p-2.5 rounded-xl transition-all flex items-center justify-center ${isLanguageOpen ? 'text-white bg-zinc-800' : 'text-gray-400 hover:text-white hover:bg-zinc-800'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </button>
