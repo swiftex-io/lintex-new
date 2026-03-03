@@ -242,18 +242,18 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           <div className="flex items-center relative mr-2 group" ref={searchRef}>
             <button 
               onClick={() => { setIsSearchOpen(!isSearchOpen); if (!isSearchOpen) setTimeout(() => inputRef.current?.focus(), 50); }}
-              className="block p-2.5 rounded-xl text-gray-400 hover:text-white transition-colors z-10 customLg:!hidden"
+              className="xl:absolute xl:left-3.5 xl:top-1/2 xl:-translate-y-1/2 p-2.5 rounded-xl text-gray-400 hover:text-white xl:pointer-events-none xl:p-0 transition-colors z-10"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </button>
-            <div className="relative hidden customLg:block">
+            <div className="relative hidden xl:block">
               <input 
                 ref={inputRef}
                 type="text" 
                 value={searchQuery}
                 onFocus={() => { setIsSearchOpen(true); }}
                 onChange={(e) => { setSearchQuery(e.target.value); setIsSearchOpen(true); }}
-                className={`bg-zinc-800/60 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-[11px] font-medium transition-all placeholder:text-gray-500 placeholder:tracking-tighter text-white shadow-inner relative z-[1] outline-none ${isSearchOpen ? 'w-48 bg-zinc-800 border-white/20' : 'w-32'}`}
+                className={`bg-zinc-800/60 hover:bg-zinc-700/80 focus:bg-zinc-700/80 rounded-xl py-2.5 pl-10 pr-4 text-[11px] font-medium transition-all placeholder:text-gray-500 placeholder:tracking-tighter text-white shadow-inner relative z-[1] outline-none ${isSearchOpen ? 'w-48 bg-zinc-700/80' : 'w-32'}`}
               />
               {!searchQuery && (
                 <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-none flex items-center h-[20px] z-[2]">
@@ -265,10 +265,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               )}
             </div>
             {/* Search Dropdown - Dark Theme Redesign */}
-            <div className={`absolute top-full right-0 customLg:left-0 mt-2 dropdown-container ${isSearchOpen ? 'is-visible' : ''}`}>
+            <div className={`absolute top-full right-0 xl:left-0 mt-2 dropdown-container ${isSearchOpen ? 'is-visible' : ''}`}>
               <div className={`${darkDropdownBaseClass} w-[340px] py-4`}>
                 {/* Mobile Search Input - only visible when main input is hidden */}
-                <div className="customLg:hidden px-4 pb-4 border-b border-zinc-800 mb-2">
+                <div className="xl:hidden px-4 pb-4 border-b border-zinc-800 mb-2">
                   <div className="relative">
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     <input 
@@ -276,7 +276,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search coins..."
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-[12px] font-medium text-white outline-none focus:border-zinc-700 transition-all"
+                      className="w-full bg-zinc-900 hover:bg-zinc-800 focus:bg-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-[12px] font-medium text-white outline-none transition-all"
                     />
                     {searchQuery && (
                       <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
@@ -399,7 +399,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             <>
               <button 
                 onClick={() => { onNavigate(Page.ASSETS); setDepositModalOpen(true); }} 
-                className="group px-5 py-2 apr-badge-glow text-white text-[12px] font-bold tracking-tight rounded-full active:scale-95 transition-all mr-3 shadow-[0_0_15px_rgba(253,104,24,0.2)] hover:shadow-[0_0_25px_rgba(253,104,24,0.4)] whitespace-nowrap shrink-0 overflow-hidden"
+                className="hidden lg:block group px-5 py-2 apr-badge-glow text-white text-[12px] font-bold tracking-tight rounded-full active:scale-95 transition-all mr-3 shadow-[0_0_15px_rgba(253,104,24,0.2)] hover:shadow-[0_0_25px_rgba(253,104,24,0.4)] whitespace-nowrap shrink-0 overflow-hidden"
               >
                 <span className="rolling-text-container relative -top-[0.5px]">
                   <span className="rolling-text-inner">
@@ -412,7 +412,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               <div className="relative h-16 flex items-center" onMouseEnter={() => setIsWalletOpen(true)} onMouseLeave={() => setIsWalletOpen(false)}>
                 <button onClick={() => onNavigate(Page.ASSETS)} className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 hover:bg-zinc-800 hover:text-white ${isWalletOpen ? 'bg-zinc-800 text-white' : (currentPage === Page.ASSETS ? 'text-white' : 'text-gray-400')}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
-                  <span className="xl:block text-[11px] font-semibold tracking-tight">Wallet</span>
+                  <span className="hidden xl:block text-[11px] font-semibold tracking-tight">Wallet</span>
                 </button>
                 <div className={`absolute top-full right-0 dropdown-container ${isWalletOpen ? 'is-visible' : ''}`}>
                   <div className={`${dropdownBaseClass} w-80 p-6`}>
@@ -486,9 +486,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </div>
               </div>
 
-              <div className="h-6 w-[1px] bg-zinc-600/60 mx-2 sm:block"></div>
+              <div className="h-6 w-[1px] bg-zinc-600/60 mx-2 hidden sm:block"></div>
               
-              <div className="relative h-16 flex items-center sm:flex" onMouseEnter={() => setIsSupportOpen(true)} onMouseLeave={() => setIsSupportOpen(false)}>
+              <div className="relative h-16 flex items-center hidden sm:flex" onMouseEnter={() => setIsSupportOpen(true)} onMouseLeave={() => setIsSupportOpen(false)}>
                 <button className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 ${isSupportOpen ? 'text-white bg-zinc-800' : 'text-gray-400 hover:text-white hover:bg-zinc-800'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 </button>
@@ -506,7 +506,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </div>
               </div>
 
-              <div className="relative h-16 flex items-center sm:flex" onMouseEnter={() => setIsLanguageOpen(true)} onMouseLeave={() => setIsLanguageOpen(false)}
+              <div className="relative h-16 flex items-center hidden sm:flex" onMouseEnter={() => setIsLanguageOpen(true)} onMouseLeave={() => setIsLanguageOpen(false)}>
                 <button className={`p-2.5 rounded-xl transition-all flex items-center justify-center ${isLanguageOpen ? 'text-white bg-zinc-800' : 'text-gray-400 hover:text-white hover:bg-zinc-800'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </button>
@@ -553,7 +553,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               <div className="relative h-16 flex items-center hidden lg:flex" onMouseEnter={() => setIsSupportOpen(true)} onMouseLeave={() => setIsSupportOpen(false)}>
                 <button className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 ${isSupportOpen ? 'text-white bg-zinc-800' : 'text-gray-400 hover:text-white hover:bg-zinc-800'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                  <span className="xl:block text-[11px] font-semibold tracking-tight">Support</span>
+                  <span className="hidden xl:block text-[11px] font-semibold tracking-tight">Support</span>
                 </button>
                 <div className={`top-full right-0 dropdown-container ${isSupportOpen ? 'is-visible' : ''}`}>
                   <div className={`${dropdownBaseClass} w-64 p-3`}>
@@ -611,7 +611,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </div>
               </div>
 
-              <div className="h-6 w-[1px] bg-zinc-600/60 mx-3 sm:block"></div>
+              <div className="h-6 w-[1px] bg-zinc-600/60 mx-3 hidden sm:block"></div>
               <button onClick={() => setShowAuth(true)} className="group px-6 py-2.5 bg-white text-black text-[12px] font-bold tracking-tight rounded-full hover:bg-gray-200 transition-all shadow-xl whitespace-nowrap shrink-0 overflow-hidden">
                 <span className="rolling-text-container">
                   <span className="rolling-text-inner">

@@ -179,7 +179,7 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
                     <span className="text-sm font-bold">{asset.symbol}<span className="text-zinc-600">/{hotCurrency}</span></span>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-mono font-bold tracking-tight text-zinc-200">{asset.price.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</div>
+                    <div className="text-sm font-primary font-bold tracking-tight text-zinc-200">{asset.price.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</div>
                     <div className={`text-[11px] font-bold ${asset.change24h >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>
                       {asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%
                     </div>
@@ -219,7 +219,7 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
                     <span className="text-sm font-bold">{item.symbol}<span className="text-zinc-600">/{newListCurrency}</span></span>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-mono font-bold tracking-tight text-zinc-200">{item.price.toFixed(item.price < 1 ? 5 : 2)}</div>
+                    <div className="text-sm font-primary font-bold tracking-tight text-zinc-200">{item.price.toFixed(item.price < 1 ? 5 : 2)}</div>
                     <div className={`text-[11px] font-bold ${item.change >= 0 ? 'text-[#00d18e]' : 'text-[#ff4d4f]'}`}>
                       {item.change >= 0 ? '+' : ''}{item.change.toFixed(2)}%
                     </div>
@@ -242,18 +242,18 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
                    <div className="w-1.5 h-1.5 rounded-full bg-[#ff4d4f]"></div>
                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Market cap</span>
                  </div>
-                 <div className="text-sm font-black">$2.31T <span className="text-[#ff4d4f] text-[11px]">-8.42%</span></div>
+                 <div className="text-sm font-primary font-black">$2.31T <span className="text-[#ff4d4f] text-[11px]">-8.42%</span></div>
                </div>
                <div>
                  <div className="flex items-center gap-1.5 mb-1.5">
                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-600"></div>
                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Volume</span>
                  </div>
-                 <div className="text-sm font-black">$358.32B <span className="text-[#00d18e] text-[11px]">+62.70%</span></div>
+                 <div className="text-sm font-primary font-black">$358.32B <span className="text-[#00d18e] text-[11px]">+62.70%</span></div>
                </div>
                <div className="text-right">
                  <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter mb-1.5">BTC dominance</div>
-                 <div className="text-sm font-black">56.4%</div>
+                 <div className="text-sm font-primary font-black">56.4%</div>
                </div>
             </div>
             {/* Mini Chart Mockup */}
