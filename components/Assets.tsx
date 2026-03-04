@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useExchangeStore } from '../store';
+import { walletService } from '../services/walletService';
 
 const DEFAULT_NETWORKS = [
   { id: 'bsc', name: 'BSC', fullName: 'BNB Smart Chain(BEP20)' },
@@ -40,7 +41,7 @@ const Assets: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Overview');
   const [activeFeeGroup, setActiveFeeGroup] = useState('Group 1');
   const [selectedAsset, setSelectedAsset] = useState('USDT');
-  const [selectedNetwork, setSelectedNetwork] = useState('bsc');
+  const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null);
   const [isAssetDropdownOpen, setIsAssetDropdownOpen] = useState(false);
   const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false);
   const [assetSearch, setAssetSearch] = useState('');
@@ -51,6 +52,8 @@ const Assets: React.FC = () => {
   const itemsPerPage = 10;
 
   const [depositStep, setDepositStep] = useState(1);
+  const [isGeneratingAddress, setIsGeneratingAddress] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState('');
   
   // History Filters
   const [historyCrypto, setHistoryCrypto] = useState('All');
@@ -76,7 +79,7 @@ const Assets: React.FC = () => {
   const pnlPercentage = 2.45;
 
   const currentAssetNetworks = ASSET_NETWORKS[selectedAsset] || DEFAULT_NETWORKS;
-  const activeNetwork = currentAssetNetworks.find(n => n.id === selectedNetwork) || currentAssetNetworks[0];
+  const activeNetwork = currentAssetNetworks.find(n => n.id === selectedNetwork);
 
   useEffect(() => {
     if (showDepositFlow) {
@@ -110,6 +113,25 @@ const Assets: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [assetSearch, hideSmallBalances, activeTab]);
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (activeTab === 'Deposit' && selectedAsset && selectedNetwork) {
+        setIsGeneratingAddress(true);
+        try {
+          // In a real app, the index would come from the user's profile in Supabase
+          const mockUserIndex = 105; 
+          const result = await walletService.generateAddress(selectedAsset, selectedNetwork, mockUserIndex);
+          setCurrentAddress(result.address);
+        } catch (error) {
+          console.error("Failed to generate address:", error);
+        } finally {
+          setIsGeneratingAddress(false);
+        }
+      }
+    };
+    fetchAddress();
+  }, [selectedAsset, selectedNetwork, activeTab]);
 
   const filteredBalances = useMemo(() => {
     let result = balances.filter(asset => 
@@ -221,8 +243,8 @@ const Assets: React.FC = () => {
                               e.stopPropagation();
                               setSelectedAsset(sym); 
                               setIsAssetDropdownOpen(false); 
-                              setSelectedNetwork(ASSET_NETWORKS[sym]?.[0]?.id || 'bsc');
-                              setDepositStep(Math.max(depositStep, 2));
+                              setSelectedNetwork(null);
+                              setDepositStep(2);
                             }}
                             className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-[11px] font-bold text-white transition-colors"
                           >
@@ -242,8 +264,8 @@ const Assets: React.FC = () => {
                         onClick={() => { 
                           setSelectedAsset(asset.symbol); 
                           setIsAssetDropdownOpen(false); 
-                          setSelectedNetwork(ASSET_NETWORKS[asset.symbol]?.[0]?.id || 'bsc');
-                          setDepositStep(Math.max(depositStep, 2));
+                          setSelectedNetwork(null);
+                          setDepositStep(2);
                         }}
                         className="px-5 py-2.5 hover:bg-white/5 cursor-pointer flex items-center gap-3 transition-colors"
                       >
@@ -276,7 +298,11 @@ const Assets: React.FC = () => {
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-white">{activeNetwork?.name} <span className="text-zinc-500 font-medium ml-1 text-xs">{activeNetwork?.fullName}</span></div>
+                      {activeNetwork ? (
+                        <div className="text-sm font-bold text-white">{activeNetwork.name} <span className="text-zinc-500 font-medium ml-1 text-xs">{activeNetwork.fullName}</span></div>
+                      ) : (
+                        <div className="text-sm font-bold text-zinc-500">Select desired network</div>
+                      )}
                     </div>
                   </div>
                   <svg className={`w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-all ${isNetworkDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
@@ -320,29 +346,41 @@ const Assets: React.FC = () => {
                 </button>
               </div>
 
-              <div className="bg-zinc-950 border border-white/5 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
+              <div className="bg-zinc-950 border border-white/5 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+                {isGeneratingAddress && (
+                  <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center gap-4 animate-in fade-in duration-300">
+                    <div className="w-10 h-10 border-2 border-brand/20 border-t-brand rounded-full animate-spin"></div>
+                    <div className="text-[11px] font-bold text-zinc-400 tracking-tight">Generating unique {selectedAsset} address...</div>
+                  </div>
+                )}
                 <div className="w-32 h-32 bg-white p-2 rounded-xl shrink-0">
-                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313" alt="QR Code" className="w-full h-full" />
+                  {currentAddress ? (
+                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${currentAddress}`} alt="QR Code" className="w-full h-full" />
+                  ) : (
+                    <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-zinc-300">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="7" height="7" x="7" y="7" rx="1"/></svg>
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 w-full">
                   <div className="text-[11px] font-bold text-zinc-500 mb-2">{activeNetwork?.fullName} Address</div>
                   <div className="flex items-center gap-2">
                     <div className="flex-1 bg-zinc-900 border border-white/5 rounded-xl px-4 py-3.5 font-mono text-sm text-white flex items-center justify-between group">
-                      <span className="truncate">0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313</span>
+                      <span className="truncate">{currentAddress}</span>
                       <svg 
                         className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-all cursor-pointer" 
                         fill="none" 
                         viewBox="0 0 24 24" 
                         stroke="currentColor" 
                         strokeWidth="2.5"
-                        onClick={() => handleCopyAddress('0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313')}
+                        onClick={() => handleCopyAddress(currentAddress)}
                       >
                         <path d="M8 4v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.242a2 2 0 0 0-.602-1.43L16.083 2.57A2 2 0 0 0 14.685 2H10a2 2 0 0 0-2 2Z"/>
                         <path d="M16 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2"/>
                       </svg>
                     </div>
                     <button 
-                      onClick={() => handleCopyAddress('0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313')}
+                      onClick={() => handleCopyAddress(currentAddress)}
                       className="px-6 py-3.5 bg-brand text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm shadow-lg shadow-brand/20"
                     >
                       Copy
@@ -419,7 +457,24 @@ const Assets: React.FC = () => {
         {/* Bottom Section: Recent Deposits */}
         <div className="pt-12 border-t border-white/5">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold tracking-tight">Recent Deposits</h2>
+            <div className="flex items-center gap-4">
+              <h2 className="text-2xl font-bold tracking-tight">Recent Deposits</h2>
+              <button 
+                onClick={async () => {
+                  addNotification({ title: 'Sweeper Started', message: 'Scanning for new deposits...', type: 'info' });
+                  const result = await walletService.sweepAddress(currentAddress);
+                  if (result.success) {
+                    addNotification({ title: 'Funds Found!', message: `Swept to Hot Wallet. Tx: ${result.txHash?.slice(0, 10)}...`, type: 'success' });
+                  } else {
+                    addNotification({ title: 'Scan Complete', message: 'No new funds found on this address.', type: 'info' });
+                  }
+                }}
+                className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold text-zinc-400 hover:text-white transition-all flex items-center gap-2"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                Scan & Sweep
+              </button>
+            </div>
             <button 
               onClick={() => setActiveTab('Funding history')}
               className="text-[11px] font-bold text-zinc-500 hover:text-white transition-all flex items-center gap-1"
@@ -650,8 +705,6 @@ const Assets: React.FC = () => {
     return (
       <div className="animate-in fade-in duration-700 space-y-8 text-left">
         <div className="flex flex-col gap-8">
-          <h1 className="text-3xl font-bold tracking-tight">Funding History</h1>
-          
           {/* Filters Section */}
           <div className="flex flex-wrap items-end gap-4">
             {/* Date Filter */}

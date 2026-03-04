@@ -463,7 +463,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
               </h3>
               <button className="text-[11px] font-bold text-zinc-600 hover:text-white transition-colors">More &gt;</button>
             </div>
-            <div className="grid grid-cols-12 text-[12px] text-zinc-600 font-medium mb-4 px-1">
+            <div className="grid grid-cols-12 text-[12px] text-zinc-600 font-medium mb-4 px-3 py-2 bg-zinc-900/50 rounded-lg">
               <div className="col-span-8">Name | Turnover</div>
               <div className="col-span-2 text-right">Price</div>
               <div className="col-span-2 text-right">24h</div>
@@ -475,7 +475,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
                     <span className="text-[11px] font-bold text-zinc-700 w-3">{idx + 1}</span>
                     <TokenLogo symbol={asset.symbol} />
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-white group-hover/row:text-brand transition-colors">{asset.symbol}<span className="text-zinc-600">/USDT</span></span>
+                      <span className="text-sm font-bold text-white transition-colors">{asset.symbol}<span className="text-zinc-600">/USDT</span></span>
                       <span className="text-[9px] text-zinc-700 font-bold tracking-tight">${(Math.random() * 2).toFixed(2)}B</span>
                     </div>
                   </div>
@@ -502,7 +502,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
                     </div>
                   </div>
                   <div className="col-span-4 text-right">
-                    <button className="bg-white hover:bg-zinc-200 text-black text-[9px] px-3 py-1 rounded-full font-black transition-all transform active:scale-95 shadow-lg">
+                    <button className="bg-white hover:bg-zinc-200 text-black text-[11px] px-4 py-1.5 rounded-full font-black transition-all transform active:scale-95 shadow-lg">
                       Promote
                     </button>
                   </div>
