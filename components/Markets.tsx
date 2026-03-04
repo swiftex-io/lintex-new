@@ -226,14 +226,14 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
             <div>
               <div className="flex items-center gap-1.5 mb-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#ff4d4f]"></div>
-                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Market cap</span>
+                <span className="text-[10px] font-bold text-zinc-500">Market cap</span>
               </div>
               <div className="text-sm font-black text-white">$2.34T <span className="text-[#ff4d4f] text-[11px]">-5.29%</span></div>
             </div>
             <div className="text-right">
               <div className="flex items-center gap-1.5 mb-1.5 justify-end">
                 <div className="w-1.5 h-1.5 rounded-full bg-zinc-600"></div>
-                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Volume</span>
+                <span className="text-[10px] font-bold text-zinc-500">Volume</span>
               </div>
               <div className="text-sm font-black text-white">$360.86B <span className="text-[#00d18e] text-[11px]">+58.35%</span></div>
             </div>
@@ -252,11 +252,11 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
           </h3>
           <div className="flex justify-between mb-6">
             <div>
-              <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter mb-1.5">Daily net</div>
+              <div className="text-[10px] font-bold text-zinc-500 mb-1.5">Daily net</div>
               <div className="text-sm font-black text-[#ff4d4f]">-$110.6M</div>
             </div>
             <div className="text-right">
-              <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter mb-1.5">Last 30D</div>
+              <div className="text-[10px] font-bold text-zinc-500 mb-1.5">Last 30D</div>
               <div className="text-sm font-black text-[#ff4d4f]">-$604.2M</div>
             </div>
           </div>
@@ -287,7 +287,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
             >
               {tab.label}
               {tab.soon && (
-                <span className="bg-brand/10 text-brand text-[9px] px-2 rounded-full font-bold uppercase tracking-wider inline-flex items-center justify-center h-4 leading-none">Soon</span>
+                <span className="bg-brand/10 text-brand text-[9px] px-2 rounded-full font-bold inline-flex items-center justify-center h-4 leading-none">Soon</span>
               )}
             </button>
           ))}
@@ -321,7 +321,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
       <div className="bg-zinc-950 border border-white/5 rounded-2xl shadow-2xl overflow-hidden">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-[12px] text-zinc-600 border-b border-zinc-900 tracking-tight">
+            <tr className="text-[12px] text-zinc-600 border-b border-zinc-900">
               <th className="px-8 py-3 font-medium">Name</th>
               <th className="px-8 py-3 font-medium">Price</th>
               <th className="px-8 py-3 font-medium">24h change</th>
@@ -396,7 +396,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
               );
             }) : (
               <tr>
-                <td colSpan={7} className="px-8 py-10 text-center text-zinc-600 text-xs font-medium uppercase tracking-widest">
+                <td colSpan={7} className="px-8 py-10 text-center text-zinc-600 text-xs font-medium">
                   No assets found
                 </td>
               </tr>
@@ -463,7 +463,7 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
               </h3>
               <button className="text-[11px] font-bold text-zinc-600 hover:text-white transition-colors">More &gt;</button>
             </div>
-            <div className="grid grid-cols-12 text-[12px] text-zinc-600 font-medium tracking-tight mb-4 px-1">
+            <div className="grid grid-cols-12 text-[12px] text-zinc-600 font-medium mb-4 px-1">
               <div className="col-span-8">Name | Turnover</div>
               <div className="col-span-2 text-right">Price</div>
               <div className="col-span-2 text-right">24h</div>
@@ -498,11 +498,11 @@ const Markets: React.FC<MarketsProps> = ({ onTrade }) => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[13px] font-bold text-brand">Promote your coin</span>
-                      <span className="text-[9px] text-brand/60 font-bold tracking-tight uppercase">Get listed here</span>
+                      <span className="text-[9px] text-brand/60 font-bold tracking-tight">Get listed here</span>
                     </div>
                   </div>
                   <div className="col-span-4 text-right">
-                    <button className="bg-white hover:bg-zinc-200 text-black text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-wider transition-all transform active:scale-95 shadow-lg">
+                    <button className="bg-white hover:bg-zinc-200 text-black text-[9px] px-3 py-1 rounded-full font-black transition-all transform active:scale-95 shadow-lg">
                       Promote
                     </button>
                   </div>

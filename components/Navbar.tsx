@@ -71,6 +71,13 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Blur input when search is closed to reset visual state
+  useEffect(() => {
+    if (!isSearchOpen) {
+      inputRef.current?.blur();
+    }
+  }, [isSearchOpen]);
+
   // Filtered results for search - Show pairs
   const searchResults = useMemo(() => {
     // We only want pairs like BTC/USDT, filtering out USDT/USDT
@@ -125,8 +132,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <div className={dropdownTextClass}>{item.title}</div>
-                          {item.soon && <span className="bg-brand/10 text-brand text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Soon</span>}
-                          {item.isNew && <span className="apr-badge-glow text-white text-[9px] px-2 py-[0.5px] rounded-full font-bold uppercase tracking-wider ml-0.5 inline-flex items-center justify-center h-4">NEW</span>}
+                          {item.soon && <span className="bg-brand/10 text-brand text-[9px] px-1.5 py-0.5 rounded font-bold tracking-wider">Soon</span>}
+                          {item.isNew && <span className="apr-badge-glow text-white text-[9px] px-2 py-[0.5px] rounded-full font-bold tracking-wider ml-0.5 inline-flex items-center justify-center h-4">NEW</span>}
                         </div>
                         <p className="text-[12px] text-gray-400 font-medium leading-tight mt-0.5">{item.desc}</p>
                       </div>
@@ -355,7 +362,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                                  <span className="text-[13px] font-bold text-white group-hover/item:text-brand transition-colors">{asset.symbol}</span>
                                  <span className="text-[11px] text-zinc-500 font-medium">/ USDT</span>
                               </div>
-                              <span className="text-[9px] bg-zinc-800 text-zinc-400 font-black px-1 rounded-sm uppercase tracking-tighter mt-1">Spot</span>
+                              <span className="text-[9px] bg-zinc-800 text-zinc-400 font-black px-1 rounded-sm tracking-tighter mt-1">Spot</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
@@ -417,7 +424,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 <div className={`absolute top-full right-0 dropdown-container ${isWalletOpen ? 'is-visible' : ''}`}>
                   <div className={`${dropdownBaseClass} w-80 p-6`}>
                     <div className="mb-6">
-                      <div className="text-[10px] font-bold text-gray-400 tracking-tight mb-1.5 opacity-80 uppercase">Total balance</div>
+                      <div className="text-[10px] font-bold text-gray-400 tracking-tight mb-1.5 opacity-80">Total balance</div>
                       <div className="flex flex-col gap-1">
                         <div className="flex items-baseline gap-2">
                           <span className="text-2xl font-bold text-black tracking-tight">${totalBalanceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>

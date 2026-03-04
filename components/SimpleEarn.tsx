@@ -58,7 +58,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
 
         <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
           <section>
-            <h3 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Term</h3>
+            <h3 className="text-[13px] font-bold text-zinc-500 mb-4">Term</h3>
             <div className="grid grid-cols-3 gap-3">
               {terms.map((term) => (
                 <button
@@ -73,7 +73,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
                   <span className="text-[11px] font-bold text-zinc-400 mb-1">{term.label}</span>
                   <div className="flex items-baseline gap-1">
                     <span className="text-lg font-bold text-white tabular-nums">{term.apr}%</span>
-                    {term.max && <span className="text-[9px] font-black text-zinc-500 uppercase">Max</span>}
+                    {term.max && <span className="text-[9px] font-black text-zinc-500">Max</span>}
                   </div>
                 </button>
               ))}
@@ -82,7 +82,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
 
           <section>
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest">Amount</h3>
+              <h3 className="text-[13px] font-bold text-zinc-500">Amount</h3>
             </div>
             <div className="relative group">
               <input
@@ -180,7 +180,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ asset, onClose, activeEarnTab }
           <button 
             disabled={!agreed || !amount || parseFloat(amount) <= 0}
             onClick={handleStake}
-            className="w-full py-4 bg-white text-black font-black rounded-full text-sm uppercase tracking-tighter disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-200 transition-all active:scale-[0.98]"
+            className="w-full py-4 bg-white text-black font-black rounded-full text-sm disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-200 transition-all active:scale-[0.98]"
           >
             Stake Now
           </button>
@@ -326,7 +326,7 @@ const SimpleEarn: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gradient-to-b from-brand/10 via-transparent to-transparent blur-[120px] pointer-events-none opacity-40"></div>
 
         <div className="relative z-10 max-w-[1400px] w-full mx-auto animate-in fade-in zoom-in-95 duration-1000">
-          <div className="mb-3 text-[14px] font-bold uppercase tracking-[0.8em] opacity-40 ml-[0.8em]">QUILEX</div>
+          <div className="mb-3 text-[14px] font-bold opacity-40 ml-[0.8em]">Quilex</div>
           <h1 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter leading-none text-white">
             {activeEarnTab}
           </h1>
@@ -407,7 +407,7 @@ const SimpleEarn: React.FC = () => {
                     <span className="text-3xl font-black tracking-tighter text-white tabular-nums">{item.apr}</span>
                   </div>
                   <div className="flex flex-col text-right">
-                    <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-1">Term</span>
+                    <span className="text-[10px] font-bold text-zinc-600 mb-1">Term</span>
                     <span className="text-lg font-bold text-zinc-300">{item.term}</span>
                   </div>
                 </div>
@@ -449,7 +449,7 @@ const SimpleEarn: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="text-[11px] text-zinc-600 font-normal border-b border-zinc-900 tracking-tight">
+                <tr className="text-[12px] text-zinc-600 font-normal border-b border-zinc-900">
                   <th className="px-8 py-4 font-normal">Token</th>
                   <th className="px-8 py-4 font-normal">Market APY</th>
                   <th className="px-8 py-4 font-normal text-right">Total Locked</th>
@@ -468,7 +468,7 @@ const SimpleEarn: React.FC = () => {
                         </div>
                         <div className="flex flex-col">
                           <span className="text-[13px] font-medium text-white group-hover:text-brand transition-colors">{product.symbol}</span>
-                          <span className="text-[9px] text-zinc-600 font-normal uppercase tracking-tight">{product.name}</span>
+                          <span className="text-[9px] text-zinc-600 font-normal">{product.name}</span>
                         </div>
                       </div>
                     </td>
@@ -496,7 +496,7 @@ const SimpleEarn: React.FC = () => {
                 )) : (
                   <tr>
                     <td colSpan={6} className="px-8 py-12 text-center">
-                      <p className="text-zinc-600 text-[11px] font-normal uppercase tracking-widest opacity-60">No products available</p>
+                      <p className="text-zinc-600 text-[11px] font-normal opacity-60">No products available</p>
                     </td>
                   </tr>
                 )}
@@ -548,7 +548,7 @@ const SimpleEarn: React.FC = () => {
                 {activeEarnTab} is a premier product that provides {activeEarnTab === 'Simple Earn' ? 'flexible or fixed terms' : 'staking rewards'} with daily payouts. Your assets are managed through institutional-grade protocols to ensure consistent yield generation.
               </p>
             </div>
-            <button className="text-brand text-[10px] font-semibold uppercase tracking-[0.2em] flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
+            <button className="text-brand text-[10px] font-semibold flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
               Learn more about yield <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
@@ -559,7 +559,7 @@ const SimpleEarn: React.FC = () => {
                 Your principal is protected by Quilex. We use industry-standard risk management frameworks to ensure that rewards are distributed consistently while maintaining 100% solvency of the pool.
               </p>
             </div>
-            <button className="text-brand text-[10px] font-semibold uppercase tracking-[0.2em] flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
+            <button className="text-brand text-[10px] font-semibold flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-all">
               Review safety report <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>

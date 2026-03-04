@@ -1,6 +1,6 @@
 
 import { create } from 'zustand';
-import { Asset, Trade, Order, Notification } from './types';
+import { Asset, Trade, Order, Notification, DepositRecord } from './types';
 import { MOCK_ASSETS } from './constants';
 import { supabase } from './lib/supabase';
 
@@ -69,6 +69,7 @@ interface ExchangeState {
   tradeHistory: Trade[];
   openOrders: Order[];
   filledOrders: Order[]; 
+  depositHistory: DepositRecord[];
   notifications: Notification[];
   favorites: string[];
   referralCode: string;
@@ -87,6 +88,7 @@ interface ExchangeState {
   initialize: () => Promise<void>;
   setUser: (user: any) => void;
   enterAsGuest: () => Promise<void>;
+  enterAsZeroBalanceGuest: () => Promise<void>;
   signOut: () => Promise<void>;
   deposit: (symbol: string, amount: number) => Promise<void>;
   withdraw: (symbol: string, amount: number) => Promise<void>;
@@ -108,6 +110,7 @@ export const useExchangeStore = create<ExchangeState>((set, get) => ({
   tradeHistory: [],
   openOrders: [],
   filledOrders: [],
+  depositHistory: [],
   notifications: [],
   favorites: [],
   referralCode: 'LINTEX_PRO_88',
@@ -173,9 +176,34 @@ export const useExchangeStore = create<ExchangeState>((set, get) => ({
       balances: MOCK_ASSETS.map(b => b.symbol === 'USDT' ? { ...b, balance: 10000, available: 10000 } : { ...b, balance: 0.1, available: 0.1 }),
       tradeHistory: [],
       openOrders: [],
-      filledOrders: []
+      filledOrders: [],
+      depositHistory: [
+        { id: 'd1', crypto: 'BNB', network: 'BSC', time: '2026-02-03 10:26:38', status: 'success', amount: 0, txId: '0x5c2...1e33', progress: '98/61' },
+        { id: 'd2', crypto: 'BNB', network: 'BSC', time: '2026-02-03 10:26:38', status: 'success', amount: 0.006, txId: '0x1da...98b1', progress: '100/61' },
+        { id: 'd3', crypto: 'BNB', network: 'BSC', time: '2026-02-03 10:17:45', status: 'success', amount: 0, txId: '0xb62...d0aa', progress: '70/61' },
+        { id: 'd4', crypto: 'BNB', network: 'BSC', time: '2026-02-03 10:17:39', status: 'success', amount: 0.012, txId: '0xdb1...08fa', progress: '87/61' },
+      ]
     });
     localStorage.setItem('lintex_guest_session', JSON.stringify(guestUser));
+  },
+
+  enterAsZeroBalanceGuest: async () => {
+    const guestUser = {
+      id: 'new-user-' + Math.random().toString(36).substr(2, 9),
+      email: 'newbie@lintex.exchange',
+      user_metadata: { nickname: 'New_User' }
+    };
+    
+    set({ 
+      user: guestUser, 
+      profile: { nickname: 'New_User' },
+      isGuest: true, 
+      balances: MOCK_ASSETS.map(b => ({ ...b, balance: 0, available: 0 })),
+      tradeHistory: [],
+      openOrders: [],
+      filledOrders: []
+    });
+    // We don't save this to localStorage to avoid persisting zero balance if they want to switch back
   },
 
   signOut: async () => {

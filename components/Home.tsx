@@ -82,7 +82,7 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Live on Mainnet</span>
+              <span className="text-[10px] font-black text-zinc-400">Live on Mainnet</span>
             </div>
             
             <h1 className="text-7xl md:text-[120px] font-black mb-8 leading-[0.85] tracking-tighter text-white">
@@ -124,25 +124,25 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center bg-[#050505]/80 backdrop-blur-2xl border border-white/5 rounded-[32px] p-12 mb-24 shadow-2xl">
           <div>
             <div className="text-4xl font-black mb-1 tracking-tighter">$2.4B+</div>
-            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">24h Volume</div>
+            <div className="text-zinc-500 text-xs font-black">24h Volume</div>
           </div>
           <div>
             <div className="text-4xl font-black mb-1 tracking-tighter">0.1%</div>
-            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">Trading Fee</div>
+            <div className="text-zinc-500 text-xs font-black">Trading Fee</div>
           </div>
           <div>
             <div className="text-4xl font-black mb-1 tracking-tighter">20M+</div>
-            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">Users</div>
+            <div className="text-zinc-500 text-xs font-black">Users</div>
           </div>
           <div>
             <div className="text-4xl font-black mb-1 tracking-tighter">100%</div>
-            <div className="text-zinc-500 text-xs font-black uppercase tracking-widest">Reserves</div>
+            <div className="text-zinc-500 text-xs font-black">Reserves</div>
           </div>
         </div>
 
         {/* Trust Section */}
         <div className="mb-24 text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-8">Trusted by industry leaders</p>
+          <p className="text-[10px] font-black text-zinc-600 mb-8">Trusted by industry leaders</p>
           <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
             {['Binance', 'Coinbase', 'Kraken', 'Bybit', 'OKX'].map(partner => (
               <div key={partner} className="text-xl font-black tracking-tighter text-white">{partner}</div>
@@ -240,19 +240,19 @@ const Home: React.FC<HomeProps> = ({ onTrade }) => {
                <div>
                  <div className="flex items-center gap-1.5 mb-1.5">
                    <div className="w-1.5 h-1.5 rounded-full bg-[#ff4d4f]"></div>
-                   <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Market cap</span>
+                   <span className="text-[10px] font-bold text-zinc-500">Market cap</span>
                  </div>
                  <div className="text-sm font-primary font-black">$2.31T <span className="text-[#ff4d4f] text-[11px]">-8.42%</span></div>
                </div>
                <div>
                  <div className="flex items-center gap-1.5 mb-1.5">
                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-600"></div>
-                   <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Volume</span>
+                   <span className="text-[10px] font-bold text-zinc-500">Volume</span>
                  </div>
                  <div className="text-sm font-primary font-black">$358.32B <span className="text-[#00d18e] text-[11px]">+62.70%</span></div>
                </div>
                <div className="text-right">
-                 <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter mb-1.5">BTC dominance</div>
+                 <div className="text-[10px] font-bold text-zinc-500 mb-1.5">BTC dominance</div>
                  <div className="text-sm font-primary font-black">56.4%</div>
                </div>
             </div>

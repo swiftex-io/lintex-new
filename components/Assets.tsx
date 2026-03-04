@@ -35,12 +35,14 @@ const ASSET_NETWORKS: Record<string, { id: string; name: string; fullName: strin
 };
 
 const Assets: React.FC = () => {
-  const { balances, deposit, isDepositModalOpen: showDepositFlow, setDepositModalOpen: setShowDepositFlow } = useExchangeStore();
+  const { balances, deposit, depositHistory, isDepositModalOpen: showDepositFlow, setDepositModalOpen: setShowDepositFlow, addNotification } = useExchangeStore();
   
   const [activeTab, setActiveTab] = useState('Overview');
   const [activeFeeGroup, setActiveFeeGroup] = useState('Group 1');
   const [selectedAsset, setSelectedAsset] = useState('USDT');
+  const [selectedNetwork, setSelectedNetwork] = useState('bsc');
   const [isAssetDropdownOpen, setIsAssetDropdownOpen] = useState(false);
+  const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false);
   const [assetSearch, setAssetSearch] = useState('');
   
   const [hideSmallBalances, setHideSmallBalances] = useState(false);
@@ -48,7 +50,23 @@ const Assets: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const [depositStep, setDepositStep] = useState(1);
+  
+  // History Filters
+  const [historyCrypto, setHistoryCrypto] = useState('All');
+  const [historyType, setHistoryType] = useState('All');
+  const [historyDateRange, setHistoryDateRange] = useState('Last 30 days');
+  const [historyCryptoSearch, setHistoryCryptoSearch] = useState('');
+
+  const [isHistoryCryptoOpen, setIsHistoryCryptoOpen] = useState(false);
+  const [isHistoryTypeOpen, setIsHistoryTypeOpen] = useState(false);
+  const [isHistoryDateOpen, setIsHistoryDateOpen] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const networkDropdownRef = useRef<HTMLDivElement>(null);
+  const historyDateRef = useRef<HTMLDivElement>(null);
+  const historyCryptoRef = useRef<HTMLDivElement>(null);
+  const historyTypeRef = useRef<HTMLDivElement>(null);
   
   const totalBalanceUSD = balances.reduce((acc, asset) => acc + (asset.balance * asset.price), 0);
   const btcPrice = balances.find(b => b.symbol === 'BTC')?.price || 65000;
@@ -57,10 +75,32 @@ const Assets: React.FC = () => {
   const pnlAmount = totalBalanceUSD * 0.0245; 
   const pnlPercentage = 2.45;
 
+  const currentAssetNetworks = ASSET_NETWORKS[selectedAsset] || DEFAULT_NETWORKS;
+  const activeNetwork = currentAssetNetworks.find(n => n.id === selectedNetwork) || currentAssetNetworks[0];
+
+  useEffect(() => {
+    if (showDepositFlow) {
+      setActiveTab('Deposit');
+      setShowDepositFlow(false);
+    }
+  }, [showDepositFlow, setShowDepositFlow]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsAssetDropdownOpen(false);
+      }
+      if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target as Node)) {
+        setIsNetworkDropdownOpen(false);
+      }
+      if (historyDateRef.current && !historyDateRef.current.contains(event.target as Node)) {
+        setIsHistoryDateOpen(false);
+      }
+      if (historyCryptoRef.current && !historyCryptoRef.current.contains(event.target as Node)) {
+        setIsHistoryCryptoOpen(false);
+      }
+      if (historyTypeRef.current && !historyTypeRef.current.contains(event.target as Node)) {
+        setIsHistoryTypeOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -105,6 +145,359 @@ const Assets: React.FC = () => {
     </div>
   );
 
+  const renderDeposit = () => {
+    const renderStepIndicator = (step: number, label: string) => {
+      const isCompleted = depositStep > step;
+      const isActive = depositStep === step;
+      
+      return (
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+          isCompleted ? 'bg-brand text-white' : (isActive ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-500')
+        }`}>
+          {isCompleted ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m20 6-11 11-5-5"/></svg>
+          ) : (
+            <span>{label}</span>
+          )}
+        </div>
+      );
+    };
+
+    const handleCopyAddress = (address: string) => {
+      navigator.clipboard.writeText(address);
+      addNotification({
+        title: 'Address Copied',
+        message: 'Deposit address has been copied to your clipboard.',
+        type: 'success'
+      });
+    };
+
+    return (
+      <div className="animate-in fade-in duration-500 space-y-12">
+        {/* Deposit Title & Back Button */}
+        <div className="flex items-center gap-5 mb-4">
+          <button 
+            onClick={() => setActiveTab('Overview')}
+            className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all text-zinc-400 hover:text-white"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <h1 className="text-3xl font-bold tracking-tight">Deposit</h1>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Left Column: Form */}
+          <div className="flex-1 space-y-12">
+            {/* Step 1: Select Crypto */}
+            <section className="text-left relative">
+              <div className="flex items-center gap-4 mb-6">
+                {renderStepIndicator(1, "1")}
+                <h3 className="text-lg font-bold tracking-tight">Select Crypto</h3>
+              </div>
+              
+              <div className="relative" ref={dropdownRef}>
+                <div 
+                  onClick={() => setIsAssetDropdownOpen(!isAssetDropdownOpen)} 
+                  className={`bg-zinc-900/40 border rounded-xl px-4 py-3.5 flex items-center justify-between cursor-pointer transition-all group ${isAssetDropdownOpen ? 'border-white' : 'border-white/5 hover:border-white/20'}`}
+                >
+                  <div className="flex items-center gap-3">
+                    {renderCryptoIcon(selectedAsset, "w-8 h-8")}
+                    <div>
+                      <div className="text-sm font-bold text-white">{selectedAsset} <span className="text-zinc-500 font-medium ml-1 text-xs">{balances.find(b => b.symbol === selectedAsset)?.name}</span></div>
+                    </div>
+                  </div>
+                  <svg className={`w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-all ${isAssetDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+
+                {isAssetDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl z-50 py-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+                    <div className="px-5 mb-4">
+                      <div className="text-[10px] font-bold text-zinc-500 mb-3">Hot Crypto</div>
+                      <div className="flex flex-wrap gap-2">
+                        {['BNB', 'USDT', 'BTC', 'ETH', 'TRX'].map(sym => (
+                          <button 
+                            key={sym}
+                            onClick={(e) => { 
+                              e.stopPropagation();
+                              setSelectedAsset(sym); 
+                              setIsAssetDropdownOpen(false); 
+                              setSelectedNetwork(ASSET_NETWORKS[sym]?.[0]?.id || 'bsc');
+                              setDepositStep(Math.max(depositStep, 2));
+                            }}
+                            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-[11px] font-bold text-white transition-colors"
+                          >
+                            {sym}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="px-5 mb-2">
+                      <div className="text-[10px] font-bold text-zinc-500 mb-3">Crypto</div>
+                    </div>
+                    
+                    {balances.map(asset => (
+                      <div 
+                        key={asset.symbol}
+                        onClick={() => { 
+                          setSelectedAsset(asset.symbol); 
+                          setIsAssetDropdownOpen(false); 
+                          setSelectedNetwork(ASSET_NETWORKS[asset.symbol]?.[0]?.id || 'bsc');
+                          setDepositStep(Math.max(depositStep, 2));
+                        }}
+                        className="px-5 py-2.5 hover:bg-white/5 cursor-pointer flex items-center gap-3 transition-colors"
+                      >
+                        {renderCryptoIcon(asset.symbol, "w-6 h-6")}
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm text-white">{asset.symbol}</span>
+                          <span className="text-xs text-zinc-500 font-medium">{asset.name}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Step 2: Network */}
+            <section className={`text-left relative transition-opacity duration-300 ${depositStep < 2 ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
+              <div className="flex items-center gap-4 mb-6">
+                {renderStepIndicator(2, "2")}
+                <h3 className="text-lg font-bold tracking-tight">Network</h3>
+              </div>
+
+              <div className="relative" ref={networkDropdownRef}>
+                <div 
+                  onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)} 
+                  className={`bg-zinc-900/40 border rounded-xl px-4 py-3.5 flex items-center justify-between cursor-pointer transition-all group ${isNetworkDropdownOpen ? 'border-white' : 'border-white/5 hover:border-white/20'}`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-500">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-white">{activeNetwork?.name} <span className="text-zinc-500 font-medium ml-1 text-xs">{activeNetwork?.fullName}</span></div>
+                    </div>
+                  </div>
+                  <svg className={`w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-all ${isNetworkDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+
+                {isNetworkDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl z-50 py-2">
+                    {currentAssetNetworks.map(network => (
+                      <div 
+                        key={network.id}
+                        onClick={() => { 
+                          setSelectedNetwork(network.id); 
+                          setIsNetworkDropdownOpen(false); 
+                          setDepositStep(Math.max(depositStep, 3));
+                        }}
+                        className="px-5 py-3 hover:bg-white/5 cursor-pointer flex items-center gap-4 transition-colors"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-500">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm text-white">{network.name}</span>
+                          <span className="text-xs text-zinc-500 font-medium">{network.fullName}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Step 3: Deposit Address */}
+            <section className={`text-left relative transition-opacity duration-300 ${depositStep < 3 ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  {renderStepIndicator(3, "3")}
+                  <h3 className="text-lg font-bold tracking-tight">Deposit Address</h3>
+                </div>
+                <button className="text-[11px] font-bold text-zinc-500 hover:text-white transition-all flex items-center gap-1">
+                  Manage Addresses <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </div>
+
+              <div className="bg-zinc-950 border border-white/5 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
+                <div className="w-32 h-32 bg-white p-2 rounded-xl shrink-0">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313" alt="QR Code" className="w-full h-full" />
+                </div>
+                <div className="flex-1 w-full">
+                  <div className="text-[11px] font-bold text-zinc-500 mb-2">{activeNetwork?.fullName} Address</div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-zinc-900 border border-white/5 rounded-xl px-4 py-3.5 font-mono text-sm text-white flex items-center justify-between group">
+                      <span className="truncate">0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313</span>
+                      <svg 
+                        className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-all cursor-pointer" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor" 
+                        strokeWidth="2.5"
+                        onClick={() => handleCopyAddress('0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313')}
+                      >
+                        <path d="M8 4v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.242a2 2 0 0 0-.602-1.43L16.083 2.57A2 2 0 0 0 14.685 2H10a2 2 0 0 0-2 2Z"/>
+                        <path d="M16 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2"/>
+                      </svg>
+                    </div>
+                    <button 
+                      onClick={() => handleCopyAddress('0x4813dca51ce7426d9ea6a0b212f758b7dbd4d313')}
+                      className="px-6 py-3.5 bg-brand text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm shadow-lg shadow-brand/20"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 space-y-4">
+                <div className="flex justify-between items-center py-2 border-b border-white/5">
+                  <span className="text-[11px] font-bold text-zinc-500">Security verification of deposit address</span>
+                  <button className="text-[11px] font-bold text-white hover:underline flex items-center gap-1">Verify <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg></button>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-white/5">
+                  <span className="text-[11px] font-bold text-zinc-500">Minimum deposit amount</span>
+                  <span className="text-[11px] font-bold text-white">0.01 {selectedAsset}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-white/5">
+                  <span className="text-[11px] font-bold text-zinc-500">Deposit Account</span>
+                  <button className="text-[11px] font-bold text-white flex items-center gap-2">
+                    Spot Account <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m17 2 4 4-4 4M3 18l4-4 4 4M21 6H9M3 18h12"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <button className="w-full mt-6 py-2 text-[11px] font-bold text-zinc-500 hover:text-white transition-all flex items-center justify-center gap-2">
+                Details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+            </section>
+          </div>
+
+          {/* Right Column: Tips & FAQ */}
+          <div className="w-full lg:w-80 space-y-6">
+            <div className="bg-zinc-950 border border-white/5 rounded-2xl p-6 text-left">
+              <h4 className="text-base font-bold mb-6">Tips</h4>
+              <ul className="space-y-6 text-[11px] text-zinc-500 leading-relaxed font-medium">
+                <li className="flex gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-1.5 shrink-0"></span>
+                  Deposits made via smart contracts may not be credited. Please deposit from a standard wallet address.
+                </li>
+                <li className="flex gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-1.5 shrink-0"></span>
+                  Lintex does not support users receiving airdrops. To avoid potential asset loss, please do not use your Lintex deposit address to receive airdrops or as a mining address.
+                </li>
+                <li className="flex gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-1.5 shrink-0"></span>
+                  This address only supports deposit of {selectedAsset} assets. Do not deposit other assets to this address as the assets will not be credited or recoverable.
+                </li>
+                <li className="flex gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-1.5 shrink-0"></span>
+                  Please note: If the single deposit amount is less than the minimum deposit amount, it will not be credited. The platform will not be liable for any loss of assets resulting from this. Thank you for your understanding and support!
+                </li>
+                <li className="flex gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700 mt-1.5 shrink-0"></span>
+                  Do not trade with high-risk platforms. <span className="text-brand hover:underline cursor-pointer">Learn More</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-zinc-950 border border-white/5 rounded-2xl p-6 text-left">
+              <div className="flex justify-between items-center mb-6">
+                <h4 className="text-base font-bold">Deposit FAQ</h4>
+                <button className="text-[10px] font-bold text-zinc-500 hover:text-white transition-all flex items-center gap-1">View More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg></button>
+              </div>
+              <ul className="space-y-4 text-[12px] font-bold text-zinc-400">
+                <li className="hover:text-white cursor-pointer transition-colors">How to Deposit on Lintex?</li>
+                <li className="hover:text-white cursor-pointer transition-colors">Have an uncredited deposit? Apply for return</li>
+                <li className="hover:text-white cursor-pointer transition-colors">View all deposit & withdrawal status</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section: Recent Deposits */}
+        <div className="pt-12 border-t border-white/5">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-bold tracking-tight">Recent Deposits</h2>
+            <button 
+              onClick={() => setActiveTab('Funding history')}
+              className="text-[11px] font-bold text-zinc-500 hover:text-white transition-all flex items-center gap-1"
+            >
+              History <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+
+          <div className="bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="bg-zinc-900/30 text-[12px] font-bold text-zinc-500 border-b border-white/5">
+                    <th className="px-8 py-5">Crypto</th>
+                    <th className="px-8 py-5">Network</th>
+                    <th className="px-8 py-5">Time</th>
+                    <th className="px-8 py-5">Status</th>
+                    <th className="px-8 py-5">Amount</th>
+                    <th className="px-8 py-5">TxID</th>
+                    <th className="px-8 py-5">Progress</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {depositHistory.length > 0 ? (
+                    depositHistory.map((record) => (
+                      <tr key={record.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-8 py-6">
+                          <div className="flex items-center gap-3">
+                            {renderCryptoIcon(record.crypto, "w-6 h-6")}
+                            <span className="font-bold text-sm">{record.crypto}</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className="flex flex-col">
+                            <span className="text-sm font-bold text-white">{record.network}</span>
+                            <span className="text-[10px] text-zinc-500 font-medium">BNB Smart Chain(...</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6 text-sm font-primary font-medium text-zinc-400">{record.time}</td>
+                        <td className="px-8 py-6">
+                          <div className="flex items-center gap-1.5 text-[#00d18e] font-bold text-sm">
+                            Deposit successful
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-zinc-500"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6 text-sm font-primary font-bold text-white">{record.amount}</td>
+                        <td className="px-8 py-6">
+                          <div className="flex items-center gap-2 text-zinc-400">
+                            <span className="text-sm font-mono">{record.txId}</span>
+                            <svg className="w-3.5 h-3.5 hover:text-white cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                            <svg className="w-3.5 h-3.5 hover:text-white cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6 text-sm font-primary font-bold text-white">{record.progress}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="px-8 py-32 text-center">
+                        <div className="flex flex-col items-center justify-center">
+                          <div className="w-20 h-20 rounded-full bg-zinc-900/50 flex items-center justify-center mb-6 border border-white/5">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-600"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/><path d="M9 13h6"/><path d="M9 17h3"/></svg>
+                          </div>
+                          <h3 className="text-lg font-bold text-white mb-2">No records found</h3>
+                          <p className="text-zinc-500 text-sm max-w-xs">You haven't made any deposits yet.</p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderOverview = () => (
     <div className="animate-in fade-in duration-500">
       <div className="grid grid-cols-1 gap-6 mb-12">
@@ -113,7 +506,7 @@ const Assets: React.FC = () => {
           
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div className="flex-1">
-              <div className="flex items-center gap-2 text-gray-500 font-medium text-[10px] uppercase tracking-widest mb-4">
+              <div className="flex items-center gap-2 text-gray-500 font-medium text-[10px] mb-4">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 <span>Total Assets Value</span>
               </div>
@@ -136,12 +529,57 @@ const Assets: React.FC = () => {
             </div>
 
             <div className="flex gap-3 w-full md:w-auto">
-              <button onClick={() => setShowDepositFlow(true)} className="flex-1 md:flex-none px-8 py-3.5 apr-badge-glow text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all shadow-lg text-xs uppercase tracking-widest">Deposit</button>
-              <button className="flex-1 md:flex-none px-8 py-3.5 bg-zinc-900 text-white font-bold rounded-full border border-white/10 hover:bg-zinc-800 transition-all text-xs uppercase tracking-widest">Withdraw</button>
+              <button onClick={() => setShowDepositFlow(true)} className="flex-1 md:flex-none px-8 py-3.5 apr-badge-glow text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all shadow-lg text-xs">Deposit</button>
+              <button className="flex-1 md:flex-none px-8 py-3.5 bg-zinc-900 text-white font-bold rounded-full border border-white/10 hover:bg-zinc-800 transition-all text-xs">Withdraw</button>
             </div>
           </div>
         </div>
       </div>
+
+      {totalBalanceUSD === 0 && (
+        <div className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <h2 className="text-xl font-bold tracking-tight mb-6 text-left">Suggestions for you</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-zinc-950 border border-white/5 rounded-2xl p-8 hover:bg-zinc-900/50 transition-all cursor-pointer group relative overflow-hidden">
+              <div className="flex items-start gap-6 relative z-10">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-400 group-hover:text-white transition-colors">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    <circle cx="12" cy="10" r="3"/><path d="M12 7v6"/>
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] font-bold text-zinc-500 mb-1 block">New user</span>
+                  <h3 className="text-lg font-bold text-white mb-4 leading-tight">How do I make a deposit?</h3>
+                  <div className="flex items-center gap-2 text-[13px] font-bold text-zinc-400 group-hover:text-white transition-colors">
+                    View more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/[0.02] rounded-full blur-2xl group-hover:bg-white/[0.05] transition-all"></div>
+            </div>
+
+            <div className="bg-zinc-950 border border-white/5 rounded-2xl p-8 hover:bg-zinc-900/50 transition-all cursor-pointer group relative overflow-hidden">
+              <div className="flex items-start gap-6 relative z-10">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-400 group-hover:text-white transition-colors">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                    <path d="M12 2v2M12 18v2M2 12h2M20 12h2"/>
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] font-bold text-zinc-500 mb-1 block">New user</span>
+                  <h3 className="text-lg font-bold text-white mb-4 leading-tight">Where is the address and tag/memo?</h3>
+                  <div className="flex items-center gap-2 text-[13px] font-bold text-zinc-400 group-hover:text-white transition-colors">
+                    View more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m9 18 6-6-6-6"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/[0.02] rounded-full blur-2xl group-hover:bg-white/[0.05] transition-all"></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col gap-4 mb-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -159,7 +597,7 @@ const Assets: React.FC = () => {
 
         <div className="bg-zinc-950 border border-white/5 rounded-2xl shadow-2xl overflow-hidden">
           <table className="w-full text-left">
-            <thead className="text-[10px] text-gray-600 font-medium uppercase border-b border-white/5">
+            <thead className="text-[12px] text-gray-600 font-medium border-b border-white/5">
               <tr>
                 <th className="px-8 py-4">Asset</th>
                 <th className="px-8 py-4">Total Balance</th>
@@ -202,6 +640,209 @@ const Assets: React.FC = () => {
     </div>
   );
 
+  const renderHistory = () => {
+    const filteredHistory = depositHistory.filter(record => {
+      if (historyCrypto !== 'All' && record.crypto !== historyCrypto) return false;
+      // In a real app, we'd filter by type and date here
+      return true;
+    });
+
+    return (
+      <div className="animate-in fade-in duration-700 space-y-8 text-left">
+        <div className="flex flex-col gap-8">
+          <h1 className="text-3xl font-bold tracking-tight">Funding History</h1>
+          
+          {/* Filters Section */}
+          <div className="flex flex-wrap items-end gap-4">
+            {/* Date Filter */}
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold text-zinc-500">Date</label>
+              <div className="relative" ref={historyDateRef}>
+                <button 
+                  onClick={() => setIsHistoryDateOpen(!isHistoryDateOpen)}
+                  className="bg-zinc-900 border border-white/5 rounded-xl px-4 py-2.5 flex items-center gap-3 min-w-[200px] hover:border-white/20 transition-all"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-zinc-500"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  <span className="text-sm font-medium text-white">{historyDateRange}</span>
+                  <svg className={`w-4 h-4 text-zinc-600 ml-auto transition-all ${isHistoryDateOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                {isHistoryDateOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-full bg-zinc-900 border border-white/10 rounded-xl shadow-2xl z-50 py-2">
+                    {['Today', 'Last 7 days', 'Last 30 days', 'Last 90 days'].map(range => (
+                      <div 
+                        key={range}
+                        onClick={() => { setHistoryDateRange(range); setIsHistoryDateOpen(false); }}
+                        className="px-4 py-2 hover:bg-white/5 cursor-pointer text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                      >
+                        {range}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Crypto Filter */}
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold text-zinc-500">Crypto</label>
+              <div className="relative" ref={historyCryptoRef}>
+                <button 
+                  onClick={() => {
+                    setIsHistoryCryptoOpen(!isHistoryCryptoOpen);
+                    setHistoryCryptoSearch('');
+                  }}
+                  className="bg-zinc-900 border border-white/5 rounded-xl px-4 py-2.5 flex items-center gap-3 min-w-[220px] hover:border-white/20 transition-all"
+                >
+                  <span className="text-sm font-medium text-white">{historyCrypto}</span>
+                  <svg className={`w-4 h-4 text-zinc-600 ml-auto transition-all ${isHistoryCryptoOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                {isHistoryCryptoOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-full bg-zinc-900 border border-white/10 rounded-xl shadow-2xl z-50 py-2 overflow-hidden">
+                    <div className="px-3 pb-2 pt-1 border-b border-white/5 mb-1">
+                      <div className="relative">
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m21 21-4.3-4.3"/><circle cx="11" cy="11" r="8"/></svg>
+                        <input 
+                          type="text"
+                          placeholder="Search crypto..."
+                          value={historyCryptoSearch}
+                          onChange={(e) => setHistoryCryptoSearch(e.target.value)}
+                          className="w-full bg-zinc-950 border border-white/10 rounded-lg pl-9 pr-3 py-1.5 text-[11px] text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/30 transition-all"
+                          autoFocus
+                        />
+                      </div>
+                    </div>
+                    <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                      {historyCryptoSearch === '' && (
+                        <div 
+                          onClick={() => { setHistoryCrypto('All'); setIsHistoryCryptoOpen(false); }}
+                          className="px-4 py-2 hover:bg-white/5 cursor-pointer text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                        >
+                          All
+                        </div>
+                      )}
+                      {balances
+                        .filter(asset => asset.symbol.toLowerCase().includes(historyCryptoSearch.toLowerCase()))
+                        .map(asset => (
+                          <div 
+                            key={asset.symbol}
+                            onClick={() => { setHistoryCrypto(asset.symbol); setIsHistoryCryptoOpen(false); }}
+                            className="px-4 py-2 hover:bg-white/5 cursor-pointer text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                          >
+                            {asset.symbol}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Type Filter */}
+            <div className="space-y-2">
+              <label className="text-[11px] font-bold text-zinc-500">Type</label>
+              <div className="relative" ref={historyTypeRef}>
+                <button 
+                  onClick={() => setIsHistoryTypeOpen(!isHistoryTypeOpen)}
+                  className="bg-zinc-900 border border-white/5 rounded-xl px-4 py-2.5 flex items-center gap-3 min-w-[220px] hover:border-white/20 transition-all"
+                >
+                  <span className="text-sm font-medium text-white">{historyType}</span>
+                  <svg className={`w-4 h-4 text-zinc-600 ml-auto transition-all ${isHistoryTypeOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                {isHistoryTypeOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-full bg-zinc-900 border border-white/10 rounded-xl shadow-2xl z-50 py-2">
+                    {['All', 'Deposit', 'Withdrawal', 'Internal Transfer'].map(type => (
+                      <div 
+                        key={type}
+                        onClick={() => { setHistoryType(type); setIsHistoryTypeOpen(false); }}
+                        className="px-4 py-2 hover:bg-white/5 cursor-pointer text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                      >
+                        {type}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="ml-auto">
+              <button 
+                className="flex items-center gap-2 px-5 py-2.5 bg-zinc-900 border border-white/5 rounded-xl text-sm font-bold text-zinc-400 hover:text-white hover:border-white/20 transition-all group shadow-lg shadow-black/20"
+                title="Download full history including records beyond 90 days"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Download
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* History Table */}
+        <div className="bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-zinc-900/30 text-[12px] font-bold text-zinc-500 border-b border-white/5">
+                  <th className="pl-8 pr-4 py-5">Time</th>
+                  <th className="px-4 py-5">Asset</th>
+                  <th className="px-8 py-5">Type</th>
+                  <th className="px-8 py-5">Amount</th>
+                  <th className="px-8 py-5">Status</th>
+                  <th className="px-8 py-5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {filteredHistory.length > 0 ? (
+                  filteredHistory.map((record) => (
+                    <tr key={record.id} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="pl-8 pr-4 py-6 text-sm font-primary font-medium text-zinc-400">{record.time}</td>
+                      <td className="px-4 py-6">
+                        <div className="flex items-center gap-3">
+                          {renderCryptoIcon(record.crypto, "w-6 h-6")}
+                          <div className="flex flex-col">
+                            <span className="font-bold text-sm">{record.crypto}</span>
+                            <span className="text-[10px] text-zinc-500 font-medium">{record.network}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className="text-sm font-medium text-white">Deposit</span>
+                      </td>
+                      <td className="px-8 py-6 text-sm font-primary font-bold text-white">{record.amount}</td>
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-1.5 text-[#00d18e] font-bold text-sm">
+                          {record.status === 'success' ? 'Completed' : record.status}
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-zinc-500"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6 text-right">
+                        <button className="text-[11px] font-bold text-zinc-500 hover:text-white transition-colors">Details</button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="px-8 py-32 text-center">
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="w-20 h-20 rounded-full bg-zinc-900/50 flex items-center justify-center mb-6 border border-white/5">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-600"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/><path d="M9 13h6"/><path d="M9 17h3"/></svg>
+                        </div>
+                        <h3 className="text-lg font-bold text-white mb-2">No records found</h3>
+                        <p className="text-zinc-500 text-sm max-w-xs">Try adjusting your filters to find what you're looking for.</p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p className="text-[12px] font-medium text-zinc-500 mt-4">
+          You can view your order history from the last 90 days, or download to view all your history
+        </p>
+      </div>
+    );
+  };
+
   const renderFees = () => (
     <div className="animate-in fade-in duration-700 space-y-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-zinc-900 pb-10 text-left">
@@ -225,11 +866,11 @@ const Assets: React.FC = () => {
             </div>
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Maker fee</div>
+                <div className="text-[11px] font-bold text-zinc-500 mb-1.5">Maker fee</div>
                 <div className="text-2xl font-primary font-bold text-white tracking-tight">0.2000%</div>
               </div>
               <div>
-                <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Taker fee</div>
+                <div className="text-[11px] font-bold text-zinc-500 mb-1.5">Taker fee</div>
                 <div className="text-2xl font-primary font-bold text-white tracking-tight">0.3500%</div>
               </div>
             </div>
@@ -268,12 +909,12 @@ const Assets: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <div className="text-sm font-bold text-zinc-500 px-2 uppercase tracking-widest">Regular users</div>
+          <div className="text-sm font-bold text-zinc-500 px-2">Regular users</div>
           <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-zinc-900/30 text-[10px] font-bold text-zinc-500 uppercase border-b border-zinc-900 tracking-wider">
+                  <tr className="bg-zinc-900/30 text-[12px] font-bold text-zinc-500 border-b border-zinc-900">
                     <th className="px-8 py-5">Tier</th>
                     <th className="px-8 py-5">Assets (USD)</th>
                     <th className="px-4 py-5 text-center">or</th>
@@ -309,7 +950,7 @@ const Assets: React.FC = () => {
     <div className="min-h-screen bg-black text-white selection:bg-white/10 overflow-x-hidden">
       <div className="bg-[#0a0a0a] border-b border-zinc-900 px-8 sticky top-0 z-[45] backdrop-blur-xl">
         <div className="max-w-[1400px] mx-auto flex gap-8 overflow-x-auto no-scrollbar">
-          {['Overview', 'Spot', 'Fees'].map((tab) => (
+          {['Overview', 'Spot', 'Fees', 'Funding history'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -327,9 +968,11 @@ const Assets: React.FC = () => {
 
       <div className="max-w-[1400px] mx-auto px-8 lg:px-12 py-10">
         {activeTab === 'Overview' && renderOverview()}
+        {activeTab === 'Deposit' && renderDeposit()}
+        {activeTab === 'Funding history' && renderHistory()}
         {activeTab === 'Fees' && renderFees()}
         
-        {!['Overview', 'Fees'].includes(activeTab) && (
+        {!['Overview', 'Deposit', 'Fees', 'Funding history'].includes(activeTab) && (
           <div className="flex flex-col items-center justify-center py-40 text-center animate-in fade-in duration-700">
              <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mb-6">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 19l7-7-7-7M5 12h14"/></svg>
@@ -339,45 +982,6 @@ const Assets: React.FC = () => {
           </div>
         )}
       </div>
-
-      {showDepositFlow && (
-        <div className="fixed inset-0 bg-black z-[100] flex flex-col animate-in slide-in-from-right duration-300">
-          <header className="h-20 border-b border-white/5 flex items-center px-8 gap-6 justify-between shrink-0">
-            <div className="flex items-center gap-6">
-              <button onClick={() => setShowDepositFlow(false)} className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors text-gray-400 hover:text-white">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-              </button>
-              <h2 className="text-3xl font-bold tracking-tight">Deposit</h2>
-            </div>
-          </header>
-
-          <div className="flex-1 flex overflow-hidden">
-            <div className="flex-1 overflow-y-auto px-8 lg:px-16 py-16 custom-scrollbar">
-               <div className="max-w-7xl mx-auto flex flex-col gap-16">
-                 <div className="flex flex-col lg:flex-row gap-16">
-                   <div className="flex-1 space-y-16">
-                      <section className="text-left">
-                        <h3 className="text-xl font-bold mb-6 tracking-tight flex items-center gap-3"><span className="hidden sm:inline text-zinc-500 text-sm">01</span> Select Crypto</h3>
-                        <div className="relative" ref={dropdownRef}>
-                          <div onClick={() => setIsAssetDropdownOpen(!isAssetDropdownOpen)} className={`bg-zinc-900/40 border rounded-xl p-6 flex items-center justify-between cursor-pointer transition-all group ${isAssetDropdownOpen ? 'border-white' : 'border-white/5 hover:border-white/20'}`}>
-                            <div className="flex items-center gap-5">
-                               {renderCryptoIcon(selectedAsset, "w-11 h-11")}
-                               <div>
-                                 <div className="text-base font-bold text-white">{selectedAsset}</div>
-                                 <div className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Select Crypto</div>
-                               </div>
-                            </div>
-                            <svg className={`w-5 h-5 text-zinc-600 group-hover:text-zinc-400 transition-all ${isAssetDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
-                          </div>
-                        </div>
-                      </section>
-                   </div>
-                 </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

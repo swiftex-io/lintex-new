@@ -16,7 +16,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<{ message: string; type?: 'db' | 'auth' | 'success' } | null>(null);
   
-  const { initialize, enterAsGuest } = useExchangeStore();
+  const { initialize, enterAsGuest, enterAsZeroBalanceGuest } = useExchangeStore();
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,7 +157,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
             {isLogin ? "Need an account? Sign Up" : "Already have an account? Log In"}
           </button>
           <button onClick={() => enterAsGuest().then(onClose)} className="w-full py-4 bg-zinc-800 text-gray-400 font-bold rounded-2xl text-[11px] hover:bg-zinc-700 transition-all border border-white/5 tracking-tight">
-            ⚡ Bypass to Guest Mode (Safe)
+            ⚡ Bypass to Guest Mode (Rich)
+          </button>
+          <button onClick={() => enterAsZeroBalanceGuest().then(onClose)} className="w-full py-4 bg-zinc-800/50 text-gray-500 font-bold rounded-2xl text-[11px] hover:bg-zinc-700 transition-all border border-white/5 tracking-tight">
+            🌱 Bypass to New User (Zero Balance)
           </button>
         </div>
       </div>

@@ -63,7 +63,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
           {/* DCA Tokens Section */}
           <section className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest">DCA Tokens</h3>
+              <h3 className="text-[13px] font-bold text-zinc-400">DCA Tokens</h3>
               <button 
                 onClick={handleAddToken}
                 className="text-[12px] font-bold text-brand hover:text-brand/80 flex items-center gap-1.5 transition-colors"
@@ -102,14 +102,14 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
                 </div>
               ))}
             </div>
-            <div className={`text-[11px] font-bold uppercase tracking-tight ${remainingAllocation !== 0 ? 'text-zinc-500' : 'text-green-500'}`}>
+            <div className={`text-[11px] font-bold tracking-tight ${remainingAllocation !== 0 ? 'text-zinc-500' : 'text-green-500'}`}>
               Remaining allocation ratio <span className="tabular-nums">{remainingAllocation}%</span>
             </div>
           </section>
 
           {/* DCA Interval Section */}
           <section className="space-y-3">
-            <h3 className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest">DCA Interval</h3>
+            <h3 className="text-[13px] font-bold text-zinc-400">DCA Interval</h3>
             <div className="space-y-3">
               <div className="relative group">
                 <select 
@@ -148,7 +148,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
 
           {/* Amount Per Round */}
           <section className="space-y-3">
-            <h3 className="text-[13px] font-bold text-zinc-400 uppercase tracking-widest">Amount Per Round</h3>
+            <h3 className="text-[13px] font-bold text-zinc-400">Amount Per Round</h3>
             <div className="relative h-14 bg-zinc-900/50 border border-white/5 rounded-xl flex items-center px-5 group focus-within:border-white/20 transition-all">
               <input 
                 type="number"
@@ -179,7 +179,7 @@ const CreatePlanModal: React.FC<CreatePlanModalProps> = ({ initialTokens, onClos
           <button 
             disabled={remainingAllocation !== 0 || !amount}
             onClick={onClose}
-            className="w-full py-5 bg-brand hover:bg-brand/80 text-white font-black rounded-full text-sm uppercase tracking-tight shadow-2xl transition-all active:scale-[0.98] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed"
+            className="w-full py-5 bg-brand hover:bg-brand/80 text-white font-black rounded-full text-sm tracking-tight shadow-2xl transition-all active:scale-[0.98] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed"
           >
             Create Plan
           </button>
@@ -268,7 +268,7 @@ const SpotDCA: React.FC = () => {
             
             <div className="flex gap-12 mb-10">
               <div className="flex flex-col">
-                <div className="text-zinc-500 text-xs font-bold flex items-center gap-1.5 uppercase tracking-wider mb-2">
+                <div className="text-zinc-500 text-xs font-bold flex items-center gap-1.5 mb-2">
                   My Holdings 
                   <button 
                     onClick={() => setHideBalances(!hideBalances)}
@@ -289,11 +289,11 @@ const SpotDCA: React.FC = () => {
                 <div className="text-3xl font-bold tabular-nums">{hideBalances ? '******' : '0.00'}</div>
               </div>
               <div className="flex flex-col">
-                <div className="text-zinc-500 text-xs font-bold uppercase tracking-wider mb-2">Total PNL</div>
+                <div className="text-zinc-500 text-xs font-bold mb-2">Total PNL</div>
                 <div className="text-3xl font-bold tabular-nums">{hideBalances ? '******' : '0.00'}</div>
               </div>
               <div className="flex flex-col">
-                <div className="text-zinc-500 text-xs font-bold uppercase tracking-wider mb-2">Active</div>
+                <div className="text-zinc-500 text-xs font-bold mb-2">Active</div>
                 <div className="text-3xl font-bold tabular-nums">0</div>
               </div>
             </div>
@@ -317,7 +317,7 @@ const SpotDCA: React.FC = () => {
               <div className="flex justify-between items-start mb-8">
                 <div>
                   <h3 className="text-lg font-bold mb-1">{card.title}</h3>
-                  <div className="text-[11px] text-zinc-500 font-bold flex items-center gap-1.5 uppercase tracking-widest">
+                  <div className="text-[11px] text-zinc-500 font-bold flex items-center gap-1.5">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     <span className="tabular-nums">{card.users}</span> Users
                   </div>
@@ -335,13 +335,13 @@ const SpotDCA: React.FC = () => {
                   <div className={`text-3xl font-black tracking-tighter tabular-nums ${card.isNegative ? 'text-red-500' : 'text-green-500'}`}>
                     {card.roi}
                   </div>
-                  <div className="text-[11px] text-zinc-500 font-bold uppercase tracking-widest mt-1">1-Year ROI</div>
+                  <div className="text-[11px] text-zinc-500 font-bold mt-1">1-Year ROI</div>
                 </div>
                 {renderSparkline(card.isNegative)}
               </div>
 
               <div className="space-y-4">
-                <div className="text-[11px] text-zinc-600 font-bold uppercase tracking-widest">Token Allocation</div>
+                <div className="text-[11px] text-zinc-600 font-bold">Token Allocation</div>
                 <div className="flex items-center">
                   <div className="flex -space-x-1.5">
                     {card.allocation.slice(0, 3).map((sym) => (
@@ -382,7 +382,7 @@ const SpotDCA: React.FC = () => {
           <div className="space-y-2">
             <div className="bg-black rounded-xl overflow-hidden">
               <table className="w-full text-left">
-                <thead className="bg-[#111318] text-[11px] text-zinc-500 uppercase font-bold tracking-widest">
+                <thead className="bg-[#111318] text-[12px] text-zinc-500 font-bold">
                   <tr>
                     <th className="px-8 py-4 font-bold">Token</th>
                     <th className="px-8 py-4 font-bold text-left">Historical ROI</th>

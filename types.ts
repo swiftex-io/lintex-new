@@ -57,3 +57,14 @@ export interface Notification {
   type: 'success' | 'info' | 'error' | 'warning';
   timestamp: number;
 }
+
+export interface DepositRecord {
+  id: string;
+  crypto: string;
+  network: string;
+  time: string;
+  status: 'success' | 'pending' | 'failed';
+  amount: number;
+  txId: string;
+  progress: string;
+}
